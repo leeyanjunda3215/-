@@ -1,0 +1,31 @@
+spring:
+  main:
+    allow-circular-references: true
+  application:
+    name: 微课管理后台
+  profiles:
+    active: dev
+  mvc:
+    #解决swagger的继承报错 修改匹配规则
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+#mybatisPlus
+mybatis-plus:
+  type-aliases-package: com.back.entity #别名扫描
+  mapper-locations: classpath*:/mapper/*.xml
+  global-config:
+    banner: false
+#基本设置
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    call-setters-on-nulls: true
+    jdbc-type-for-null: null
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+server:
+  tomcat:
+    uri-encoding: UTF-8
+  port: 8082
+
