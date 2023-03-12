@@ -11,6 +11,7 @@ import axios from 'axios';
 
 import store from './store';
 
+
 //将axios挂载到原型链上
 Vue.prototype.$axios = axios
 

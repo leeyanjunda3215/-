@@ -3,6 +3,8 @@ export default {
         videopath : "",
 
         search :"",
+        user:"",
+        chatuser:""
     },
     mutations: {
           getvideopath:(state)=>{

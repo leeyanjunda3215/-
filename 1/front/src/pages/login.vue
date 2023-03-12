@@ -9,7 +9,7 @@
                     <el-input v-model.number="ruleForm.name"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="password">
-                    <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
+                    <el-input type="password" v-model="ruleForm.password" autocomplete="off"  @keyup.enter.native="submitForm('ruleForm')"></el-input>
                 </el-form-item>
       
                 <el-form-item>
@@ -22,7 +22,6 @@
     </div>
 </template>
 <script>
-import store from '../store/tab'
 export default {
     name: 'login',
     data() {

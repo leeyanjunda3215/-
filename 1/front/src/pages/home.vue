@@ -12,53 +12,28 @@
             </div>
 
 
-            <div class="center">
-                <!-- java 的展示 -->
-                <div class="title">
-                    <p>JAVA</p>
-                </div>
-                <el-divider class="line"></el-divider>
-                <!-- 展示 视频的封面 -->
-                <div class="cover" v-for="item in path" :key="item.vId" :index="item.classify"
-                    v-if="item.classify == 'JAVA'">
-                    <div>
-                        <img class="show" style="cursor: pointer;" :src="item.cover" @click="Gotoplay(item)" />
-                        <div class="vname">
-                            <p>{{ item.vName }}</p>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- python 的展示 -->
-                <div class="title">
-                    <p>Python</p>
-                </div>
-                <el-divider class="line"></el-divider>
-                <!-- 展示 视频的封面 -->
-                <div class="cover" v-for="item in path" :key="item.vId" :index="item.classify"
-                    v-if="item.classify == 'Python'">
-                    <div>
-                        <img class="show" style="cursor: pointer;" :src="item.cover" @click="Gotoplay(item)" />
-                        <div class="vname">
-                            <p>{{ item.vName }}</p>
-                        </div>
+            <div v-for="i in classify">
+                <div class="center">
+                    <!-- 分类 的展示 -->
+                    <div class="title">
+                        <p>{{ i.classify }}</p>
                     </div>
-                </div>
 
-                <!-- 动漫 的展示 -->
-                <div class="title">
-                    <p>动漫</p>
-                </div>
-                <el-divider class="line"></el-divider>
-                <!-- 展示 视频的封面 -->
-                <div class="cover" v-for="item in path" :key="item.vId" :index="item.classify"
-                    v-if="item.classify == '动漫'">
-                    <div>
-                        <img class="show" style="cursor: pointer;" :src="item.cover" @click="Gotoplay(item)" />
-                        <div class="vname">
-                            <p>{{ item.vName }}</p>
+                    <el-divider class="line"></el-divider>
+                    <!-- 展示 视频的封面 -->
+                    
+                            <div class="towall">
+
+                                <div class="cover" v-for="(item,index) in path" :key="item.vId" :index="item.classify" v-if="item.classify == i.classify ">
+                                    <div class="showAndText">
+                                        <img class="show" style="cursor: pointer;" :src="item.cover"
+                                            @click="Gotoplay(item)" />
+                                        <p>{{ item.vName }}</p>
+                                    </div>
+                                </div>
                         </div>
-                    </div>
+                   
                 </div>
             </div>
 
@@ -75,15 +50,23 @@ export default {
         return {
             path: [],
             carousel: [],
+            classify:[],
 
         }
     },
     created() {
+        this.queryclassify()
         this.querypath()
         this.queryimg()
-
     },
     methods: {
+        queryclassify(){
+            this.$axios.get("http://localhost:8082/video/queryclassify").then(resp =>{
+                if (resp.data.success == true){
+                    this.classify = resp.data.data
+                }
+            })
+        },
         Gotoplay(i) {
             this.$store.state.tab.videopath = i;
             location.href = "http://localhost:8081/#/play"
@@ -97,11 +80,8 @@ export default {
         queryimg() {
             this.$axios.get("http://localhost:8082/video/getCarousel").then(resp => {
                 if (resp.data.success == true) {
-
                     this.carousel = resp.data.data
                     // console.log(this.carousel);
-
-
                 }
             })
         }
@@ -147,25 +127,33 @@ export default {
             width: 80%;
         }
 
-        .cover {
+        .towall {
             margin-left: 10%;
-            display: inline-block;
-            align-content: center;
-            align-items: center;
 
-            .show {
-                width: 150px;
-                height: 255px;
-                padding: 10px;
-                padding-left: 0;
-                padding-right: 20px;
-                object-fit: fill;
+            .cover {
+                margin-right: 2%;
+                display: inline-block;
+                align-content: center;
+                align-items: center;
+
+                .showAndText{
+                    text-align: center;
+                }
+
+                .show {
+                    margin-right: 5%;
+                    width: 255px;
+                    height: 150px;
+                    padding: 10px;
+                    padding-left: 0;
+                    padding-right: 20px;
+                    object-fit: fill;
+                }
+
+        
             }
         }
 
-        .vname {
-            margin-left: 10%;
-        }
     }
 
 

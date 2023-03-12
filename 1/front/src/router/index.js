@@ -7,6 +7,11 @@ import play from '@/pages/play'
 import home from '@/pages/home'
 import info from '@/pages/info'
 import search from '@/pages/search'
+import upload from '@/pages/upload'
+import chat from '@/pages/chat'
+import last from '@/pages/last'
+import classify from '@/pages/classify'
+import collection from '@/pages/collection'
 
 Vue.use(Router)
 
@@ -22,12 +27,11 @@ export default new Router({
       name: 'register',
       component: register
     },
- 
     {
       path: '/',
       name: 'index',
-      component:index,
-      children:[
+      component: index,
+      children: [
         {
           path: '/play',
           name: 'play',
@@ -47,7 +51,32 @@ export default new Router({
           path: '/search',
           name: 'search',
           component: search
-        }
+        },
+        {
+          path: '/upload',
+          name: 'upload',
+          component: upload
+        },
+        {
+          path: '/chat',
+          name: 'chat',
+          component: chat
+        },
+        {
+          path: '/last',
+          name: 'last',
+          component: last
+        },
+        {
+          path: '/collection',
+          name: 'collection',
+          component: collection
+        },
+        {
+          path: '/classify',
+          name: 'classify',
+          component: classify
+        },
       ]
     }
   ]
