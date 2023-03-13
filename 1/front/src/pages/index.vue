@@ -43,6 +43,7 @@
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="Gotoinfo()">个人信息</el-dropdown-item>
+              <el-dropdown-item @click.native="ChangeInfo()">修改信息</el-dropdown-item>
               <el-dropdown-item @click.native="Logout()">退出</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -113,6 +114,9 @@ export default {
     },
     Gotoinfo() {
       location.href = "http://localhost:8081/#/info";
+    },
+    ChangeInfo(){
+      location.href = "http://localhost:8081/#/changeInfo";
     },
     Logout() {
       // 登出

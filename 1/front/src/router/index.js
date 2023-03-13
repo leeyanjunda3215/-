@@ -12,6 +12,7 @@ import chat from '@/pages/chat'
 import last from '@/pages/last'
 import classify from '@/pages/classify'
 import collection from '@/pages/collection'
+import changeInfo from '@/pages/changeInfo'
 
 Vue.use(Router)
 
@@ -77,6 +78,11 @@ export default new Router({
           name: 'classify',
           component: classify
         },
+        {
+          path: '/changeInfo',
+          name: 'changeInfo',
+          component: changeInfo
+        }
       ]
     }
   ]

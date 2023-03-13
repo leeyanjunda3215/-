@@ -3,8 +3,7 @@
 
         <div class="re-form">
             <p>用户注册</p>
-            <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px"
-                class="demo-ruleForm">
+            <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 
                 <el-form-item label="用户名" prop="name">
                     <el-input v-model="ruleForm.name"></el-input>
@@ -131,7 +130,7 @@ export default {
                 if (resp.data.success == true) {
                     this.$message.success('注册成功');
                     location.href = "http://localhost:8081/#/login"
-                }else{
+                } else {
                     this.$message.error(resp.data.errorMsg);
                 }
 

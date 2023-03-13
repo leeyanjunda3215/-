@@ -1,5 +1,4 @@
 <template>
-
     <el-main>
         <div class="main">
             <!-- 轮播图 -->
@@ -22,25 +21,36 @@
 
                     <el-divider class="line"></el-divider>
                     <!-- 展示 视频的封面 -->
-                    
-                            <div class="towall">
 
-                                <div class="cover" v-for="(item,index) in path" :key="item.vId" :index="item.classify" v-if="item.classify == i.classify ">
-                                    <div class="showAndText">
-                                        <img class="show" style="cursor: pointer;" :src="item.cover"
-                                            @click="Gotoplay(item)" />
-                                        <p>{{ item.vName }}</p>
-                                    </div>
-                                </div>
+                    <div class="towall">
+                        <div class="cover" v-for="(item, index) in path" :key="item.vId" :index="item.classify"
+                            v-if="item.classify == i.classify">
+                            <div class="showAndText">
+                                <img class="show" style="cursor: pointer;" :src="item.cover" @click="Gotoplay(item)" />
+                                <p>{{ item.vName }}</p>
+                            </div>
                         </div>
-                   
+                    </div>
+
+                    <!-- <el-row :gutter="20">
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple"></div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple"></div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple"></div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple"></div>
+                        </el-col>
+                    </el-row> -->
                 </div>
             </div>
 
         </div>
     </el-main>
-
-
 </template>
 
 <script>
@@ -50,7 +60,7 @@ export default {
         return {
             path: [],
             carousel: [],
-            classify:[],
+            classify: [],
 
         }
     },
@@ -60,9 +70,9 @@ export default {
         this.queryimg()
     },
     methods: {
-        queryclassify(){
-            this.$axios.get("http://localhost:8082/video/queryclassify").then(resp =>{
-                if (resp.data.success == true){
+        queryclassify() {
+            this.$axios.get("http://localhost:8082/video/queryclassify").then(resp => {
+                if (resp.data.success == true) {
                     this.classify = resp.data.data
                 }
             })
@@ -123,20 +133,23 @@ export default {
         }
 
         .line {
+            // max-height: 20px;
             margin-left: 10%;
             width: 80%;
         }
 
         .towall {
             margin-left: 10%;
-
+            max-height: 400px;
+            overflow: hidden;
             .cover {
+
                 margin-right: 2%;
                 display: inline-block;
                 align-content: center;
                 align-items: center;
 
-                .showAndText{
+                .showAndText {
                     text-align: center;
                 }
 
@@ -150,12 +163,11 @@ export default {
                     object-fit: fill;
                 }
 
-        
+
             }
         }
 
     }
 
 
-}
-</style>
+}</style>
