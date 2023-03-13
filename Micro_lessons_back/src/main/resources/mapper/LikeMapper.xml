@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.back.mapper.LikeMapper">
+
+    <select id="querylikes" resultType="java.lang.Integer">
+        select v_id from liked where u_id=#{uid} and liked=#{liked}
+    </select>
+
+    <select id="querycollectioned" resultType="java.lang.Integer">
+        select v_id from liked where u_id=#{uid} and collectioned=#{collectioned}
+    </select>
+
+</mapper>

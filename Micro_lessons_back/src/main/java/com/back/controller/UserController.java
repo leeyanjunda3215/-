@@ -55,7 +55,7 @@ public class UserController {
     @GetMapping("/me")
     public Result me(){
         User user = UserHolder.getUser();
-        System.out.println("接口/user/me:  "+user);
+//        System.out.println("接口/user/me:  "+user);
         return Result.ok(user);
     }
 

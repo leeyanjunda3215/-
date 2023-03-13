@@ -16,8 +16,9 @@ public class Video implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "v_id", type = IdType.AUTO)
     private Integer vId;
+
+    private String brief;
 
     private String vName;
 
@@ -37,12 +38,37 @@ public class Video implements Serializable {
 
     private int userId;
 
+    @Override
+    public String toString() {
+        return "Video{" +
+                "vId=" + vId +
+                ", brief='" + brief + '\'' +
+                ", vName='" + vName + '\'' +
+                ", isDelete=" + isDelete +
+                ", videopath='" + videopath + '\'' +
+                ", classify='" + classify + '\'' +
+                ", times=" + times +
+                ", tag='" + tag + '\'' +
+                ", episodes=" + episodes +
+                ", cover='" + cover + '\'' +
+                ", userId=" + userId +
+                '}';
+    }
+
     public int getUserId() {
         return userId;
     }
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public String getBrief() {
+        return brief;
+    }
+
+    public void setBrief(String brief) {
+        this.brief = brief;
     }
 
     public Integer getvId() {
@@ -109,19 +135,5 @@ public class Video implements Serializable {
         this.cover = cover;
     }
 
-    @Override
-    public String toString() {
-        return "Video{" +
-                "vId=" + vId +
-                ", vName='" + vName + '\'' +
-                ", isDelete=" + isDelete +
-                ", videopath='" + videopath + '\'' +
-                ", classify='" + classify + '\'' +
-                ", times=" + times +
-                ", tag='" + tag + '\'' +
-                ", episodes=" + episodes +
-                ", cover='" + cover + '\'' +
-                ", userId=" + userId +
-                '}';
-    }
+
 }

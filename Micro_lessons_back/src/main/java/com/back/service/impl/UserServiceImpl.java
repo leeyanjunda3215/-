@@ -118,8 +118,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public Result UserisVideo() {
-        Integer id = UserHolder.getUser().getId();
-        return Result.ok(id);
+        User user = UserHolder.getUser();
+        return Result.ok(user);
     }
 
 

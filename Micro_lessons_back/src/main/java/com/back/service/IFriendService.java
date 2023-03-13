@@ -21,4 +21,6 @@ public interface IFriendService  extends IService<Friend> {
     Result TakeOffFollow(Map<String, String> id);
 
     Result isfollowed(Map<String, String> id);
+
+    Result querybyid();
 }

@@ -1,7 +1,7 @@
 package com.back.service.impl;
 
+import com.back.dto.FollowDTO;
 import com.back.entity.Friend;
-import com.back.entity.User;
 import com.back.mapper.FriendMapper;
 import com.back.service.IFriendService;
 import com.back.util.Result;
@@ -40,12 +40,13 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend> impleme
         Integer videoid = Integer.parseInt(id);
         List<Friend> list = friendService.query().eq("is_delete",0).eq("follow_id", userid).eq("user_id", videoid).list();
 //        判断 list是否为空 ，空就新建
-        if ( list == null){
+        if ( list.isEmpty()){
             System.out.println("没有关注");
             //将 粉丝 和 视频作者id 封装成 Friend 实体类
             Friend rela = new Friend();
             rela.setUserId(userid);
             rela.setFollowId(videoid);
+            rela.setIsDelete(1);
             //存入数据库friend表中
             friendService.save(rela);
             return Result.ok();
@@ -87,7 +88,7 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend> impleme
         }
         Integer videoid = Integer.parseInt(id1);
 //        去数据库查询是否 包含关注 关系
-        List<Friend> list = friendService.query().eq("is_delete",1).eq("follow_id", userdid).eq("user_id", videoid).list();
+        List<Friend> list = friendService.query().eq("is_delete",1).eq("follow_id", videoid).eq("user_id", userdid).list();
         if (list.isEmpty()){
             //空就是没有关注
             return Result.fail("没有关注");
@@ -96,5 +97,22 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend> impleme
         }
 
 
+    }
+
+    @Override
+    public Result querybyid() {
+//        获取登录的用户
+        Integer id = UserHolder.getUser().getId();
+        System.out.println(id);
+//        根据用户的id，查询关注数量和粉丝数量
+//        关注
+        Long follow = friendService.query().select("follow_id").eq("is_delete",1).eq("user_id", id).count();
+//        粉丝
+        Long fan = friendService.query().select("follow_id").eq("is_delete",1).eq("follow_id", id).count();
+//        封装到实体类
+        FollowDTO followDTO = new FollowDTO();
+        followDTO.setFollow((follow.intValue()));
+        followDTO.setFan(fan.intValue());
+        return Result.ok(followDTO);
     }
 }

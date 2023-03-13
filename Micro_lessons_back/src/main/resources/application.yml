@@ -9,6 +9,14 @@ spring:
     #解决swagger的继承报错 修改匹配规则
     pathmatch:
       matching-strategy: ant_path_matcher
+  servlet:
+    multipart:
+      max-file-size: 2000MB
+      max-request-size: 2000MB
+  redis:
+    lettuce:
+      pool:
+        max-wait:
 
 #mybatisPlus
 mybatis-plus:
@@ -23,6 +31,7 @@ mybatis-plus:
     call-setters-on-nulls: true
     jdbc-type-for-null: null
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
 
 server:
   tomcat:

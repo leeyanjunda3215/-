@@ -26,7 +26,15 @@ public class MvcConfig implements WebMvcConfigurer {
                        "/user/videoUser",
                        "/back/*",
                        "/user/path",
-                       "/video/*"
+                       "/video/all",
+                       "/video/getCarousel",
+                       "/video/search",
+                       "/video/addTimes",
+                       "/video/queryclassify",
+                       "/video/getVideoCover",
+                       "/video/getVideo",
+                       "/video/getlastbypage",
+                       "/comment/*"
                );
     }
 }
