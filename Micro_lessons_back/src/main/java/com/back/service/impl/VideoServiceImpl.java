@@ -139,9 +139,28 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
 //     计算查询条目数
         int size = pageSize;
 //     查询当前页面数据
-        List<Video> videos = videoMapper.getByPage(begin, size);
+        List<Video> videos = videoMapper.getlastByPage(begin, size);
 //      查询总记录数
         int totalCount = videoMapper.selectTotalCount();
+
+        PageBean<Video> pageBean = new PageBean<>();
+        pageBean.setRows(videos);
+        pageBean.setTotalCount(totalCount);
+        return Result.ok(pageBean);
+    }
+
+    @Override
+    public Result getClassifyByPage(Integer currentPage, Integer pageSize, String classify, String tag) {
+//        System.out.println(classify+" : "+tag+" : "+" : "+currentPage+" : "+pageSize);
+        //      计算开始索引
+        int begin = (currentPage - 1) * pageSize;
+//     计算查询条目数
+        int size = pageSize;
+//     查询当前页面数据
+        List<Video> videos = videoMapper.getClassifyByPage(begin, size,classify,tag);
+
+        //      查询总记录数
+        int totalCount = videoMapper.getClassifyByPageTotal(begin, size,classify,tag);
 
         PageBean<Video> pageBean = new PageBean<>();
         pageBean.setRows(videos);

@@ -1,5 +1,8 @@
 package com.back.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+
 /**
  * <p>
  *
@@ -11,7 +14,7 @@ package com.back.entity;
 public class Liked {
 
     private static final long serialVersionUID = 1L;
-
+    @TableId(value = "l_id",type = IdType.AUTO)
     private int lId;
 
 

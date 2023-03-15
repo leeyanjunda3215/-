@@ -37,4 +37,6 @@ public interface IVideoService extends IService<Video> {
     Result getVideoInfo(VideoForm videoinfo);
 
     Result getLastByPage(Integer currentPage, Integer pageSize);
+
+    Result getClassifyByPage(Integer currentPage, Integer pageSize, String classify, String tag);
 }

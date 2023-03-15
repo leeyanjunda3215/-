@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
  */
 public class Friend {
     private static final long serialVersionUID = 1L;
+    @TableId(value = "f_id",type = IdType.AUTO)
     private int fId;
 
     private int userId;

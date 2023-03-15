@@ -79,4 +79,12 @@ public class VideoController {
     public Result getLastByPage(@RequestParam("currentPage") Integer currentPage,@RequestParam("pageSize") Integer pageSize){
         return videoService.getLastByPage(currentPage,pageSize);
     }
+
+    @PostMapping("/getClassifyByPage")
+    public Result getClassifyByPage(@RequestParam("currentPage") Integer currentPage,
+                                    @RequestParam("pageSize") Integer pageSize,
+                                    @RequestParam("classify") String classify,
+                                    @RequestParam("tag") String tag){
+        return videoService.getClassifyByPage(currentPage,pageSize,classify,tag);
+    }
 }

@@ -7,12 +7,16 @@ import com.back.mapper.UserMapper;
 import com.back.service.IUserService;
 import com.back.util.Result;
 import com.back.util.UserHolder;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -122,5 +126,32 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         return Result.ok(user);
     }
 
+    @Override
+    public Result updateUserHeadImg(MultipartFile pic) throws IOException {
+//        System.out.println(file);
+        Integer id = UserHolder.getUser().getId();
+        String path= "D:\\liyanjun\\video\\User\\user"+id+".png";
+        File file = new File(path);
+        pic.transferTo(file);
+//        更改数据库中头像的地址
+        String pathimg = "http://127.0.0.1:9999/User/user"+id+".png";
+        UpdateWrapper wrapper= new UpdateWrapper();
+        wrapper.eq("id",id);
+        wrapper.set("headimg",pathimg);
+        userService.update(wrapper);
+        return Result.ok();
+    }
 
+    @Override
+    public Result updataUser(User user) {
+        Integer id = UserHolder.getUser().getId();
+        UpdateWrapper wrapper = new UpdateWrapper();
+        wrapper.eq("id",id);
+        wrapper.set("name",user.getName());
+        wrapper.set("password",user.getPassword()); 
+        wrapper.set("phone",user.getPhone());
+        wrapper.set("email",user.getEmail());
+        userService.update(wrapper);
+        return Result.ok();
+    }
 }

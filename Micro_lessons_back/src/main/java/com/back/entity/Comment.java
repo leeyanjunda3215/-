@@ -1,6 +1,9 @@
 package com.back.entity;
 
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.sql.Timestamp;
 
 /**
@@ -13,6 +16,7 @@ import java.sql.Timestamp;
  */
 public class Comment {
     private static final long serialVersionUID = 1L;
+    @TableId(value = "c_id",type = IdType.AUTO)
     private int cId;
     private String content;
     private String createTime;

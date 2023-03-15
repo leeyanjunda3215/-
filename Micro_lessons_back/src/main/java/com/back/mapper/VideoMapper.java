@@ -24,9 +24,19 @@ public interface VideoMapper extends BaseMapper<Video> {
 
         void addTimes(@Param("id") Integer id);
 
-        //分页
+        //查询最新视频 和 分页
         @Select("select * from video order by v_id DESC limit #{begin},#{size} ")
-        List<Video> getByPage(@Param("begin") int begin,@Param("size") int size);
+        List<Video> getlastByPage(@Param("begin") int begin,@Param("size") int size);
+
+        //查询分类视频 和 分页
+        @Select("select * from video where classify=#{classify} and tag=#{tag} limit #{begin},#{size}")
+        List<Video> getClassifyByPage(@Param("begin") int begin,@Param("size") int size,@Param("classify") String classify,
+                          @Param("tag") String tag);
+
+//        查询分类视频的总数
+@Select("select count(*) from video where classify=#{classify} and tag=#{tag} limit #{begin},#{size}")
+int getClassifyByPageTotal(@Param("begin") int begin,@Param("size") int size,@Param("classify") String classify,
+                              @Param("tag") String tag);
 
 //        查询总记录数
         @Select("select count(*) from video")

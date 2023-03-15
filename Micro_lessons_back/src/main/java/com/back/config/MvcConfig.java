@@ -34,6 +34,7 @@ public class MvcConfig implements WebMvcConfigurer {
                        "/video/getVideoCover",
                        "/video/getVideo",
                        "/video/getlastbypage",
+                       "/video/getClassifyByPage",
                        "/comment/*"
                );
     }

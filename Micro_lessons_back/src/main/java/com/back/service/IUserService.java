@@ -4,8 +4,10 @@ import com.back.dto.LoginFrom;
 import com.back.entity.User;
 import com.back.util.Result;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -28,4 +30,7 @@ public interface IUserService extends IService<User> {
 
     Result UserisVideo();
 
+    Result updateUserHeadImg(MultipartFile file) throws IOException;
+
+    Result updataUser(User user);
 }
