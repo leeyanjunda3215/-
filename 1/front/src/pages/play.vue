@@ -1,13 +1,13 @@
 <template>
   <el-main>
     <div class="user">
-      <img :src="user.headimg" alt="头像">
+      <img :src="user.headimg" alt="头像" @click="Gotoinfo(user.id)">
       <div class="userinfo">
         <p>{{ user.name }}</p>
         <div ref="followbtn" class="tools_btn">
           <el-button size="mini" type="info" icon="el-icon-plus" @click="follow()" v-if=isfollow>已关注</el-button>
           <el-button size="mini" type="primary" icon="el-icon-plus" @click="follow()" v-else>关注</el-button>
-          <el-button size="mini" type="primary" icon="el-icon-plus" @click="gotochat()" >私 信</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-plus" @click="gotochat()">私 信</el-button>
         </div>
       </div>
     </div>
@@ -67,8 +67,8 @@
           <p>{{ item.username }}</p>
           <P>|</P>
           <p>{{ item.createTime }}</p>
-          <img v-if=isheart class="heart" src="../assets/icon/heart1.png" alt="">
-          <img v-else class="heart" src="../assets/icon/heart0.png" alt="">
+          <!-- <img v-if=isheart class="heart" src="../assets/icon/heart1.png" alt="">
+          <img v-else class="heart" src="../assets/icon/heart0.png" alt=""> -->
           <a @click="toreply(item.cId)">回复</a>
         </div>
 
@@ -106,8 +106,8 @@
             <p>{{ i.username }}</p>
             <P>|</P>
             <p>{{ i.createTime }}</p>
-            <img v-if=isheart class="heart" src="../assets/icon/heart1.png" alt="">
-            <img v-else class="heart" src="../assets/icon/heart0.png" alt="">
+            <!-- <img v-if=isheart class="heart" src="../assets/icon/heart1.png" alt="">
+            <img v-else class="heart" src="../assets/icon/heart0.png" alt=""> -->
             <!-- <a @click="toreply(item.cId)">回复</a> -->
           </div>
           <div class="content">
@@ -176,10 +176,16 @@ export default {
     this.iscollctiond()
   },
   methods: {
+    // 跳转到用户信息
+    Gotoinfo(i) {
+      console.log(1);
+      this.$router.push({ path: '/info', query: { id: i } })
+      console.log('跳转结束');
+    },
     // 跳转到私聊界面
     gotochat() {
       // this.$store.state.tab.chatuser = this.user
-      localStorage.setItem("chatwith",JSON.stringify(this.user) )
+      localStorage.setItem("chatwith", JSON.stringify(this.user))
       location.href = "http://localhost:8081/#/chat"
     },
     // 展示视频作者详情，私聊等人
@@ -442,11 +448,13 @@ template {
   }
 
   img:hover {
-   width: 55px;
+    width: 55px;
   }
-  .tools_btn{
-    display: flex; 
+
+  .tools_btn {
+    display: flex;
   }
+
   .userinfo {
     margin-top: 10px;
     margin-left: 20px;

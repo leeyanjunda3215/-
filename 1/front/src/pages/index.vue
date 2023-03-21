@@ -60,7 +60,7 @@
 
 
 <script>
-
+import search from './search.vue'
 export default {
   name: 'index',
   data() {
@@ -70,23 +70,27 @@ export default {
     }
   },
   created() {
+
     this.queryUser()
   },
+  components: {
+    search
+  },
   methods: {
-    Gotolast(){
+    Gotolast() {
       location.href = "http://localhost:8081/#/last"
     },
     Gotochat() {
       if (this.user.length == 0) {
         this.$message.error("请登录");
       } else {
-      location.href = "http://localhost:8081/#/chat"
-    }
+        location.href = "http://localhost:8081/#/chat"
+      }
     },
-    GotoCollection(){
+    GotoCollection() {
       location.href = "http://localhost:8081/#/collection"
     },
-    GotoClassify(){
+    GotoClassify() {
       location.href = "http://localhost:8081/#/classify"
     },
     Gotoupload() {
@@ -105,8 +109,8 @@ export default {
       this.$axios.get("http://localhost:8082/user/me").then(resp => {
         //保存用户
         this.user = resp.data.data
-        
-        this.$store.state.tab.user=this.user
+
+        this.$store.state.tab.user = this.user
       })
     },
     Gologin() {
@@ -115,7 +119,7 @@ export default {
     Gotoinfo() {
       location.href = "http://localhost:8081/#/info";
     },
-    ChangeInfo(){
+    ChangeInfo() {
       location.href = "http://localhost:8081/#/changeInfo";
     },
     Logout() {
@@ -133,14 +137,15 @@ export default {
     },
     handleSelect() {
       var input = this.input1
-      this.$axios.post("http://localhost:8082/video/search", { input }).then(resp => {
-        if (resp.data.success == true) {
-          // console.log(resp.data.data);
-          this.$store.state.tab.search = resp.data.data;
-          location.href = "http://localhost:8081/#/search";
-        }
-      })
+      if (input == "") {
+        this.$message({ showClose: true, message: "请输入搜索内容" })
+      }
+      else {
+        // this.$store.state.tab.search = input
+        this.$router.push({ path: '/search', query: { input: input } })
+      }
     }
+
   }
 }
 </script>
@@ -264,4 +269,5 @@ p {
     }
   }
 
-}</style>
+}
+</style>
