@@ -23,7 +23,7 @@ public interface IVideoService extends IService<Video> {
 
     Result getAll();
 
-    Result search(Map<String,String> search);
+    Result search(int currentPage,int pageSize,String search);
 
     Result addTimes(Video video);
 
@@ -39,4 +39,15 @@ public interface IVideoService extends IService<Video> {
     Result getLastByPage(Integer currentPage, Integer pageSize);
 
     Result getClassifyByPage(Integer currentPage, Integer pageSize, String classify, String tag);
+
+    Result getAllByPage(Integer currentPage, Integer pageSize);
+
+    Result getVideoByUser();
+
+    Result SearchKeyWord(Map<String, String> keyWord);
+
+    Result DeleteVideo(Video video);
+
+
+    Result UpdateVideoName(String currentName, String updateName);
 }

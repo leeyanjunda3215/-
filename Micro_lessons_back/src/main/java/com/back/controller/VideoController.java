@@ -45,8 +45,10 @@ public class VideoController {
     }
 
     @PostMapping("/search")
-    public Result search(@RequestBody Map<String, String> search) {
-        return videoService.search(search);
+    public Result search(@RequestParam("currentPage") Integer currentPage,
+                         @RequestParam("pageSize") Integer pageSize,
+                         @RequestParam("search") String search) {
+        return videoService.search(currentPage,pageSize,search);
     }
 
     @PostMapping("/addTimes")
@@ -87,4 +89,35 @@ public class VideoController {
                                     @RequestParam("tag") String tag){
         return videoService.getClassifyByPage(currentPage,pageSize,classify,tag);
     }
+
+    @PostMapping("/getAllByPage")
+    public Result getAllByPage(@RequestParam("currentPage") Integer currentPage,
+                               @RequestParam("pageSize") Integer pageSize){
+        return videoService.getAllByPage(currentPage,pageSize);
+    }
+
+    @GetMapping("/getVideoByUser")
+    public Result getVideoByUser(){
+        return videoService.getVideoByUser();
+    }
+
+    @PostMapping("/SearchKeyWord")
+    public Result SearchKeyWord(@RequestBody Map<String,String> KeyWord){
+        return videoService.SearchKeyWord(KeyWord);
+    }
+
+    @PostMapping("/DeleteVideo")
+    public Result DeleteVideo(@RequestBody Video video){
+        return videoService.DeleteVideo(video);
+    }
+
+    @PostMapping("/UpdateVideoName")
+    public Result UpdateVideoName(@RequestParam("currentName") String currentName,
+                                  @RequestParam("updateName") String updateName){
+        return videoService.UpdateVideoName(currentName,updateName);
+    }
+
+
+
+
 }

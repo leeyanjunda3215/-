@@ -7,6 +7,8 @@ import com.back.mapper.VideoMapper;
 import com.back.service.IVideoService;
 import com.back.util.Result;
 import com.back.util.UserHolder;
+import com.baomidou.mybatisplus.core.conditions.update.Update;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,10 +49,22 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     }
 
     @Override
-    public Result search(Map<String, String> search) {
-        String input = search.get("input");
-        List<Video> videos = videoMapper.querySearch(input);
-        return Result.ok(videos);
+    public Result search(int currentPage, int pageSize, String search) {
+//        System.out.println("当前页："+currentPage+"页大小："+pageSize+"要搜索的内容："+search);
+        //      计算开始索引
+        int begin = (currentPage - 1) * pageSize;
+//     计算查询条目数
+        int size = pageSize;
+//     查询当前页面数据
+        List<Video> videos = videoMapper.searchbyPage(begin, size, "%" + search + "%");
+
+        //      查询总记录数
+        int totalCount = videoMapper.searchbyPageTotal(begin, size, "%" + search + "%");
+
+        PageBean<Video> pageBean = new PageBean<>();
+        pageBean.setRows(videos);
+        pageBean.setTotalCount(totalCount);
+        return Result.ok(pageBean);
     }
 
     @Override
@@ -157,15 +171,70 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
 //     计算查询条目数
         int size = pageSize;
 //     查询当前页面数据
-        List<Video> videos = videoMapper.getClassifyByPage(begin, size,classify,tag);
+        List<Video> videos = videoMapper.getClassifyByPage(begin, size, classify, tag);
 
         //      查询总记录数
-        int totalCount = videoMapper.getClassifyByPageTotal(begin, size,classify,tag);
+        int totalCount = videoMapper.getClassifyByPageTotal(begin, size, classify, tag);
 
         PageBean<Video> pageBean = new PageBean<>();
         pageBean.setRows(videos);
         pageBean.setTotalCount(totalCount);
         return Result.ok(pageBean);
+    }
+
+    @Override
+    public Result getAllByPage(Integer currentPage, Integer pageSize) {
+        //      计算开始索引
+        int begin = (currentPage - 1) * pageSize;
+//     计算查询条目数
+        int size = pageSize;
+        //     查询当前页面数据
+        List<Video> videos = videoMapper.getAllByPage(begin, size);
+        //      查询总记录数
+        int totalCount = videoMapper.getAllByPageTotalCount();
+
+        PageBean<Video> pageBean = new PageBean<>();
+        pageBean.setRows(videos);
+        pageBean.setTotalCount(totalCount);
+        return Result.ok(pageBean);
+    }
+
+    @Override
+    public Result getVideoByUser() {
+//        获取当前用户
+        Integer id = UserHolder.getUser().getId();
+
+        List<Video> videos = videoService.query().eq("is_delete",1).eq("user_id", id).list();
+        return Result.ok(videos);
+    }
+
+    @Override
+    public Result SearchKeyWord(Map<String, String> keyWord) {
+//        获取搜索的关键词
+        String  keyword = keyWord.get("search");
+        List<Video> videos = videoMapper.getVideoByKeyWord("%" + keyword + "%");
+        return Result.ok(videos);
+    }
+
+    @Override
+    public Result DeleteVideo(Video video) {
+        System.out.println(video);
+//        逻辑删除 这个视频
+        UpdateWrapper wrapper = new UpdateWrapper();
+        wrapper.eq("v_id",video.getvId());
+        wrapper.set("is_delete",0);
+        videoService.update(wrapper);
+        return Result.ok();
+    }
+
+    @Override
+    public Result UpdateVideoName(String currentId, String updateName) {
+//        去数据库更改
+        UpdateWrapper wrapper = new UpdateWrapper();
+        wrapper.eq("v_id",currentId);
+        wrapper.set("v_Name",updateName);
+        videoService.update(wrapper);
+        return Result.ok();
     }
 
 
