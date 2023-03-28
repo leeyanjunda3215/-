@@ -36,6 +36,7 @@ public class MvcConfig implements WebMvcConfigurer {
                        "/video/getlastbypage",
                        "/video/getClassifyByPage",
                        "/video/getAllByPage",
+                       "/fisco/*",
                        "/comment/*"
                );
     }
