@@ -2,47 +2,41 @@
     <el-main>
 
         <div class="box-card" :body-style="{ padding: '0px' }">
-
             <div class="out-box-right">
                 <div class="box-right ">
                     <div v-for="i in chatuser">
-                        <div id="person" class="person" @click="choose(i.id)">
-
+                        <div tabindex="1" id="person" class="person" @click="choose(i.id)">
                             <img :src="i.headimg" alt="">
                             <div>
                                 <p>{{ i.name }}</p>
                             </div>
-
                         </div>
                     </div>
-
                 </div>
             </div>
-
-
 
 
             <div class="box-left">
                 <div class="chatwindows">
                     <div></div>
-                    <div>
-                        <div class="me" v-for="i in me">
+                    <div v-for="i in message">
+                        <div class="me" v-if="i.type == 'me'">
                             <div class="me_content">
-                                <p>{{ i }}</p>
+                                <p>{{ i.message }}</p>
                             </div>
                             <div class="me_img">
-                                <img :src="user.headimg" alt="">
+                                <img src="../assets/images/user0.png" alt="">
                             </div>
                             <div>
 
                             </div>
                         </div>
-                        <div class="other" v-for="i in getmessage">
+                        <div class="other" v-if="i.type == 'other'">
                             <div class="other_img">
-                                <img :src="chatuser.headimg" alt="">
+                                <img src="../assets/images/user0.png" alt="">
                             </div>
                             <div class="other_content">
-                                <p>{{ i }}</p>
+                                <p>{{ i.message }}</p>
                             </div>
                         </div>
                     </div>
@@ -77,10 +71,9 @@ export default {
             user: [],
             // 输入的内容
             input: "",
-            // 收到来自服务器的信息
-            getmessage: [],
-            // 当前用户发送的信息
-            me: [],
+            // 消息
+            message: [],
+
             // 发送用户的id
             sendto: [],
             // 连接路径
@@ -90,39 +83,27 @@ export default {
         };
     },
     created() {
-        var temp = this.$store.state.tab.user
-        if (!(temp.length == 0)) {
-            this.getuser()
-        }
-        if (temp.length == 0) {
-            this.user = JSON.parse(sessionStorage.getItem("user"))
-        }
+        this.getuser()
         this.getchatwith()
-        this.initWebsocket()
 
     },
     methods: {
         getchatwith() {
-            // var user =  this.$store.state.tab.chatuser
-            var user = JSON.parse(localStorage.getItem("chatwith"))
-            // console.log(user);
-            this.chatuser.push(user)
-            if (user.id == this.user.id) {
-                this.chatuser.pop(user)
-            }
-
+            // 暂定关注的人列表
+            this.$axios.get("http://localhost:8082/friend/queryFollowById").then(resp => {
+                if (resp.data.success = true) {
+                    this.chatuser = resp.data.data
+                }
+            })
         },
         getuser() {
             this.user = this.$store.state.tab.user
             sessionStorage.setItem("user", JSON.stringify(this.user))
         }
         ,
-        initWebsocket() {
-            // var user = this.$store.state.tab.user
-            var sendto = this.chatuser[0]
-            // console.log(sendto);
-            // console.log(sendto.id);
-            var path = this.path + this.user.id+"/"+sendto.id
+        initWebsocket(id) {
+
+            var path = this.path + this.user.id + "/" + id
             console.log(path);
 
             this.socket = new WebSocket(path)
@@ -142,7 +123,7 @@ export default {
         // websocket连接成功的时候触发
         open() {
             console.log("websocket连接成功");
-            
+
             // 建立联系后 显示聊天的对象
             // console.log(this.chatuser);
             // 获取用户
@@ -150,10 +131,9 @@ export default {
         },
         // 收到来自服务器的消息时触发
         onmessage(msg) {
-            // console.log(msg);
-            
-            this.getmessage.push(msg.data)
-            console.log("服务端", msg.data)
+            var me = { "type": "other", "message": msg.data }
+            this.message.push(me)
+            // console.log("服务端", msg.data)
         },
         // 当websocket连接关闭的时候触发
         onclose() {
@@ -162,14 +142,13 @@ export default {
         // 当websocket连接发生错误的时候触发
         onerror() {
             console.log("websocket连接发生错误");
-
         },
         // 向服务器发送消息
         sendMessage() {
             // 发送消息的用户
             // var user = this.user
             // 被发送消息的用户
-            var sendto = this.chatuser[0]
+            var sendto = this.sendto
             // console.log(user.id);
             // console.log(sendto.id);
             if (this.input == "") {
@@ -178,23 +157,24 @@ export default {
                 // console.log(sendto.id);
                 // 获取输入的内容
                 var message = this.input
-                 // 发送的消息格式
-                var json = {"toId":sendto.id,"message":message};
+                // 发送的消息格式
+                var json = { "toId": sendto, "message": message };
                 // 发送内容到服务端
                 this.socket.send(JSON.stringify(json))
                 // 将内容循环到页面
-                this.me.push(message)
+                var me = { "type": "me", "message": message }
+                this.message.push(me)
                 // 重置内容
                 this.input = ""
-             
+
             }
 
         },
         // 点击用户框，选择私信用户
         choose(item) {
+            console.log(item);
+            this.initWebsocket(item)
             this.sendto = item;
-            var btn = document.getElementById("person")
-            btn.style.backgroundColor = "#E6A23C"
         }
 
 
@@ -252,6 +232,14 @@ export default {
             .person:hover {
                 background-color: #409EFF;
             }
+
+            .person:active {
+                background-color: #409EFF;
+            }
+
+            .person:focus {
+                background-color: #409EFF;
+            }
         }
     }
 
@@ -284,6 +272,7 @@ export default {
                 .me_content {
                     width: 40vh;
                     height: auto;
+
                     p {
                         float: right;
                         font-size: 27px;
@@ -351,4 +340,5 @@ export default {
             }
         }
     }
-}</style>
+}
+</style>

@@ -26,26 +26,13 @@
                         <div class="cover" v-for="(item, index) in path" :key="item.vId" :index="item.classify"
                             v-if="item.classify == i.classify">
                             <div class="showAndText">
-                                <img class="show" style="cursor: pointer;" :src="item.cover" @click="Gotoplay(item)" />
+                                <!-- <img class="show" style="" :src="item.cover"  /> -->
+                                <video id="video" class="show" muted :src="item.videopath + '/1.mp4'" :poster="item.cover"
+                                    @click="Gotoplay(item)"></video>
                                 <p>{{ item.vName }}</p>
                             </div>
                         </div>
                     </div>
-
-                    <!-- <el-row :gutter="20">
-                        <el-col :span="6">
-                            <div class="grid-content bg-purple"></div>
-                        </el-col>
-                        <el-col :span="6">
-                            <div class="grid-content bg-purple"></div>
-                        </el-col>
-                        <el-col :span="6">
-                            <div class="grid-content bg-purple"></div>
-                        </el-col>
-                        <el-col :span="6">
-                            <div class="grid-content bg-purple"></div>
-                        </el-col>
-                    </el-row> -->
                 </div>
             </div>
 
@@ -70,6 +57,17 @@ export default {
         this.queryimg()
     },
     methods: {
+        // 视频暂停
+        // VideoPuse() {
+        //     var video = document.getElementById("video")
+        //     video.pause()
+        // },
+        // 鼠标移入观看
+        // WatchVideoByHover(item) {
+        //     var video = document.getElementById("video")
+        //     video.play()
+        // },
+        // 查询所有分类
         queryclassify() {
             this.$axios.get("http://localhost:8082/video/queryclassify").then(resp => {
                 if (resp.data.success == true) {
@@ -160,6 +158,7 @@ export default {
                 }
 
                 .show {
+                    cursor: pointer;
                     margin-right: 5%;
                     width: 255px;
                     height: 150px;

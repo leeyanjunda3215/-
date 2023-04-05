@@ -208,6 +208,18 @@ p {
       color: #409EFF;
       // font-size: 28px;
     }
+
+    p:active {
+      margin-top: 5px;
+      color: #409EFF;
+      // font-size: 28px;
+    }
+
+    p:focus {
+      margin-top: 5px;
+      color: #409EFF;
+      // font-size: 28px;
+    }
   }
 
   .seach {

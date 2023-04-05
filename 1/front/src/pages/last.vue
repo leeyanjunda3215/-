@@ -1,7 +1,7 @@
 <template>
     <el-main>
         <div class="last">
-            <div class="mainbody">
+            <div class="mainbodylast">
                 <div class="cover" v-for="item in video">
                     <div class="showAndText">
                         <img class="show" style="cursor: pointer;" :src="item.cover" @click="Gotoplay(item)" />
@@ -66,11 +66,11 @@ export default {
     background: #fafafa;
     border: 1px solid #e1e2e5;
 
-    .mainbody::-webkit-scrollbar {
+    .mainbodylast::-webkit-scrollbar {
         display: none;
     }
 
-    .mainbody {
+    .mainbodylast {
         height: 80vh;
         overflow: scroll;
 
