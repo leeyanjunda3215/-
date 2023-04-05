@@ -2,6 +2,7 @@ package com.back.service.impl;
 
 import com.back.dto.FollowDTO;
 import com.back.entity.Friend;
+import com.back.entity.User;
 import com.back.mapper.FriendMapper;
 import com.back.service.IFriendService;
 import com.back.util.Result;
@@ -27,6 +28,10 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend> impleme
 
     @Resource
     private IFriendService friendService;
+
+    @Resource
+    private FriendMapper friendMapper;
+
     @Override
     public Result follow(Map<String, String> friend) {
         //获取 观看视频|| 点关注按钮 的人 的id
@@ -114,5 +119,18 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend> impleme
         followDTO.setFollow((follow.intValue()));
         followDTO.setFan(fan.intValue());
         return Result.ok(followDTO);
+    }
+
+    @Override
+    public Result queryFollowById() {
+//        查询登录的用户id
+        Integer userId = UserHolder.getUser().getId();
+        if (userId == null){
+            return Result.fail("用户没有登录");
+        }
+//        根据用户id查询所有的关注用户列表
+        List<User> users = friendMapper.queryFollowids(userId);
+
+        return Result.ok(users);
     }
 }

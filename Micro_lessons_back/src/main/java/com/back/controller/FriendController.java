@@ -44,4 +44,9 @@ public class FriendController {
         return friendService.querybyid();
     }
 
+    @GetMapping("/queryFollowById")
+    public Result queryFollowById(){
+        return friendService.queryFollowById();
+    }
+
 }
