@@ -5,7 +5,7 @@
             <div class="out-box-right">
                 <div class="box-right ">
                     <div v-for="i in chatuser">
-                        <div tabindex="1" id="person" class="person" @click="choose(i.id)">
+                        <div :id="i.id" class="person" @click="choose(i.id)">
                             <img :src="i.headimg" alt="">
                             <div>
                                 <p>{{ i.name }}</p>
@@ -83,7 +83,13 @@ export default {
         };
     },
     created() {
-        this.getuser()
+        var temp = this.$store.state.tab.user
+        if (!(temp.length == 0)) {
+            this.getuser()
+        }
+        if (temp.length == 0) {
+            this.user = JSON.parse(sessionStorage.getItem("user"))
+        }
         this.getchatwith()
 
     },
@@ -133,6 +139,7 @@ export default {
         onmessage(msg) {
             var me = { "type": "other", "message": msg.data }
             this.message.push(me)
+
             // console.log("服务端", msg.data)
         },
         // 当websocket连接关闭的时候触发
@@ -172,12 +179,19 @@ export default {
         },
         // 点击用户框，选择私信用户
         choose(item) {
-            console.log(item);
+            // 重置颜色
+            for (let i in this.chatuser) {
+                var test = document.getElementById(this.chatuser[i].id)
+                test.style.backgroundColor = 'rgba(0,0,0,0)';
+            }
+            // 对应的 用户框变色
+            var person = document.getElementById(item)
+            person.style.backgroundColor = '#409EFF';
+            //建立 对应的 websocket连接 
             this.initWebsocket(item)
             this.sendto = item;
+
         }
-
-
     }
 }
 </script>
@@ -233,13 +247,13 @@ export default {
                 background-color: #409EFF;
             }
 
-            .person:active {
-                background-color: #409EFF;
-            }
+            // .person:active {
+            //     background-color: #409EFF;
+            // }
 
-            .person:focus {
-                background-color: #409EFF;
-            }
+            // .person:focus {
+            //     background-color: #409EFF;
+            // }
         }
     }
 
