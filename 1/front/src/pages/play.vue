@@ -7,7 +7,7 @@
         <div ref="followbtn" class="tools_btn">
           <el-button size="mini" type="info" icon="el-icon-plus" @click="follow()" v-if=isfollow>已关注</el-button>
           <el-button size="mini" type="primary" icon="el-icon-plus" @click="follow()" v-else>关注</el-button>
-          <el-button size="mini" type="primary" icon="el-icon-plus" @click="gotochat()">私 信</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-message" @click="gotochat()">私 信</el-button>
         </div>
       </div>
     </div>
@@ -178,15 +178,16 @@ export default {
   methods: {
     // 跳转到用户信息
     Gotoinfo(i) {
-      console.log(1);
       this.$router.push({ path: '/info', query: { id: i } })
       console.log('跳转结束');
     },
     // 跳转到私聊界面
     gotochat() {
-      // this.$store.state.tab.chatuser = this.user
-      localStorage.setItem("chatwith", JSON.stringify(this.user))
-      location.href = "http://localhost:8081/#/chat"
+      // // this.$store.state.tab.chatuser = this.user
+      // localStorage.setItem("chatwith", JSON.stringify(this.user))
+      // location.href = "http://localhost:8081/#/chat"
+      var toid = this.user.id
+      this.$router.push({ path: '/chat', query: { toid: toid } })
     },
     // 展示视频作者详情，私聊等人
     showUserHoverInfo() {

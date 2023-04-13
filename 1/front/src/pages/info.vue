@@ -12,6 +12,9 @@
           <p>粉丝: {{ follow.fan }}</p>
         </div>
       </div>
+      <div style="margin-top: 15vh;" v-if="user.id == otherid">
+        <el-button size="large" type="primary" icon="el-icon-message" @click="gotochat()">私 信</el-button>
+      </div>
     </div>
 
     <!-- main -->
@@ -39,7 +42,6 @@
                     <div v-if="isEdit">
                       <p @dblclick="HandleUpdateName(scope.row.vName)">{{ scope.row.vName }}</p>
                     </div>
-
                     <div v-else>
                       <div v-if="updateRowName == scope.row.vName">
                         <el-input v-model="updateName" :placeholder="scope.row.vName" type="text"
@@ -61,7 +63,7 @@
                     <el-button size="mini" @click="queryVideoByUser()">复原</el-button>
 
                   </template>
-                  <template slot-scope="scope">
+                  <template slot-scope="scope" v-if="!(user.id == otherid)">
                     <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                   </template>
                 </el-table-column>
@@ -121,8 +123,12 @@ export default {
   data() {
     return {
       activeName: 'first',
-      // 当前用户
+      //关注 false是没有关注，true 是关注
+      isfollow: false,
+      // 用户的个人空间
       user: [],
+      // 其他用户的id
+      otherid: "",
       // 当前用户的视频作品
       uservideo: [],
       // 关注的数量和粉丝的数量
@@ -143,19 +149,59 @@ export default {
     }
   },
   mounted() {
-    this.queryUser()
+    this.getotheruserid()
+    if (this.otherid == undefined) {
+      this.queryUser()
+    } else {
+      this.getotheruser(this.otherid)
+
+    }
     this.queryfollowAndfan()
     this.querylikes()
     this.queryCollections()
     this.queryVideoByUser()
     this.queryUserHistory()
+    this.querycorrentUser()
   },
   methods: {
+    // 查询现在的用户
+    querycorrentUser() {
+      this.$axios.get("http://localhost:8082/user/me").then(resp => {
+        //保存用户
+        if (resp.data.success = true) {
+          this.userNow = resp.data.data
+        }
+      })
+    },
+    // 跳转到私聊界面
+    gotochat() {
+      // // this.$store.state.tab.chatuser = this.user
+      // localStorage.setItem("chatwith", JSON.stringify(this.user))
+      // location.href = "http://localhost:8081/#/chat"
+      var toid = this.user.id
+      this.$router.push({ path: '/chat', query: { toid: toid } })
+    },
+    // 获取 点击用户的id
+    getotheruserid() {
+      var id = this.$route.query.id
+      this.otherid = id
+    },
+    // 根据 获取 的 id 查询对的用户
+    getotheruser(id) {
+      // 根据id查出对应的用户
+      var params = new URLSearchParams();
+      params.append("id", id)
+      this.$axios.post("http://localhost:8082/user/queryUserById", params).then(resp => {
+        if (resp.data.success = true) {
+          // console.log(resp.data.data);
+          this.user = resp.data.data
+        }
+      })
+    },
     // 查询 当前用户的观看历史
     queryUserHistory() {
       this.$axios.get("http://localhost:8082/history/queryUserHistory").then(resp => {
         if (resp.data.success = true) {
-          console.log(resp.data.data);
           this.historyvideo = resp.data.data
         }
       })

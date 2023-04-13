@@ -25,7 +25,7 @@
                                 <p>{{ i.message }}</p>
                             </div>
                             <div class="me_img">
-                                <img src="../assets/images/user0.png" alt="">
+                                <img :src="user.headimg" alt="">
                             </div>
                             <div>
 
@@ -33,7 +33,7 @@
                         </div>
                         <div class="other" v-if="i.type == 'other'">
                             <div class="other_img">
-                                <img src="../assets/images/user0.png" alt="">
+                                <img :src="otheruser.headimg" alt="">
                             </div>
                             <div class="other_content">
                                 <p>{{ i.message }}</p>
@@ -59,6 +59,8 @@
 </template>
   
 <script>
+import { parse } from 'json5';
+
 
 
 export default {
@@ -69,11 +71,12 @@ export default {
             chatuser: [],
             //  用户
             user: [],
+            // 其他的用户
+            otheruser: [],
             // 输入的内容
             input: "",
             // 消息
             message: [],
-
             // 发送用户的id
             sendto: [],
             // 连接路径
@@ -82,7 +85,7 @@ export default {
             socket: "",
         };
     },
-    created() {
+    mounted() {
         var temp = this.$store.state.tab.user
         if (!(temp.length == 0)) {
             this.getuser()
@@ -91,16 +94,51 @@ export default {
             this.user = JSON.parse(sessionStorage.getItem("user"))
         }
         this.getchatwith()
+        this.getchatList()
 
     },
     methods: {
-        getchatwith() {
-            // 暂定关注的人列表
-            this.$axios.get("http://localhost:8082/friend/queryFollowById").then(resp => {
+        // 查询 历史 聊天记录
+        getHistoryMessage(item) {
+            var params = new URLSearchParams();
+            params.append("id", item)
+            this.$axios.post("http://localhost:8082/message/getHistoryMessage", params).then(resp => {
                 if (resp.data.success = true) {
+                    // var data = resp.data.data
+                    // for (let i = 0; i <= data.length; i++) {
+                    //     console.log(data[i]);
+                    //     var message = data[i]
+                    //     this.message.push(message)
+                    // }
+                    this.message = resp.data.data
+                }
+            })
+        },
+        // 获取对应的聊天列表
+        getchatList() {
+            this.$axios.get("http://localhost:8082/message/getchatlist").then(resp => {
+                if (resp.data.success = true) {
+                    // console.log(resp.data.data);
                     this.chatuser = resp.data.data
                 }
             })
+        },
+        getchatwith() {
+            // 获取私聊的用户id
+            var id = this.$route.query.toid
+            console.log(id);
+            // 根据id查出对应的用户
+            var params = new URLSearchParams();
+            params.append("id", id)
+            this.$axios.post("http://localhost:8082/user/queryUserById", params).then(resp => {
+                if (resp.data.success = true) {
+                    // console.log(resp.data.data);
+                    this.otheruser = resp.data.data
+                    this.getchatList()
+                    this.choose(id)
+                }
+            })
+
         },
         getuser() {
             this.user = this.$store.state.tab.user
@@ -137,9 +175,12 @@ export default {
         },
         // 收到来自服务器的消息时触发
         onmessage(msg) {
-            var me = { "type": "other", "message": msg.data }
-            this.message.push(me)
-
+            var data = JSON.parse(msg.data)
+            console.log(data);
+            if (this.user.id == data.toId) {
+                var me = { "type": "other", "message": data.message }
+                this.message.push(me)
+            }
             // console.log("服务端", msg.data)
         },
         // 当websocket连接关闭的时候触发
@@ -179,6 +220,8 @@ export default {
         },
         // 点击用户框，选择私信用户
         choose(item) {
+            // 查询 历史 聊天记录
+            this.getHistoryMessage(item)
             // 重置颜色
             for (let i in this.chatuser) {
                 var test = document.getElementById(this.chatuser[i].id)
@@ -190,6 +233,15 @@ export default {
             //建立 对应的 websocket连接 
             this.initWebsocket(item)
             this.sendto = item;
+            // 查询对应的用户
+            var params = new URLSearchParams();
+            params.append("id", item)
+            this.$axios.post("http://localhost:8082/user/queryUserById", params).then(resp => {
+                if (resp.data.success = true) {
+                    // console.log(resp.data.data);
+                    this.otheruser = resp.data.data
+                }
+            })
 
         }
     }

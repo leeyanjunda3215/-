@@ -96,6 +96,7 @@ export default {
     Gotoupload() {
       if (this.user.length == 0) {
         this.$message.error("请登录");
+        // this.$message({ showClose: true, message: "请登录", type: error })
       } else {
         location.href = "http://localhost:8081/#/upload"
       }
