@@ -1,11 +1,9 @@
 package com.back.dto;
 
-import com.back.entity.User;
-
 /**
  * 浏览器发送给服务器的websocket数据
  */
-public class Message {
+public class MessageDto {
     private String toId;
     private String message;
 

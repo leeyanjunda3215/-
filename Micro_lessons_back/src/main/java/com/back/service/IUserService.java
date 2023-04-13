@@ -33,4 +33,6 @@ public interface IUserService extends IService<User> {
     Result updateUserHeadImg(MultipartFile file) throws IOException;
 
     Result updataUser(User user);
+
+    Result queryUserById(int id);
 }

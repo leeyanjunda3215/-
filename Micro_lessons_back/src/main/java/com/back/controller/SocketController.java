@@ -1,26 +1,33 @@
 package com.back.controller;
 
-import com.back.config.WebSocketConfig;
-import com.back.dto.Message;
-import com.back.entity.User;
-import com.back.util.Result;
-import com.back.util.UserHolder;
+import com.alibaba.fastjson2.JSONObject;
+import com.back.dto.MessageDto;
+import com.back.entity.Message;
+import com.back.service.IMessageService;
+import com.baomidou.mybatisplus.core.conditions.update.Update;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpSession;
+import javax.annotation.Resource;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.Map;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 
 @Component
 @ServerEndpoint(value = "/chat/{userId}/{sendTo}")
 public class SocketController {
+    //    注入消息服务类
+    @Resource
+    private IMessageService messageService;
+
     /**
      * 用来记录当前在线连接数。应该把它设计成线程安全的。
      */
@@ -41,6 +48,7 @@ public class SocketController {
      */
     private String userId = "";
 
+
     /**
      * 连接成功后自动调用
      *
@@ -51,6 +59,7 @@ public class SocketController {
     public void OnOpen(Session session, @PathParam("userId") String userId) throws IOException {
         this.session = session;
         this.userId = userId;
+
         if (webSocketMap.containsKey(userId)) {
             webSocketMap.remove(userId);
             webSocketMap.put(userId, this);
@@ -58,7 +67,7 @@ public class SocketController {
             webSocketMap.put(userId, this);
         }
 //      登录后将 其他用户发送给他的消息 发送给这个用户
-        if (messageMap.containsKey(userId)){
+        if (messageMap.containsKey(userId)) {
 //      对应的消息
             String data = messageMap.get(userId);
             webSocketMap.get(userId).session.getBasicRemote().sendText(data);
@@ -74,30 +83,46 @@ public class SocketController {
      * @param message
      * @param session
      */
+
     @OnMessage
     public void OnMessage(String message, Session session) {
         System.out.println("收到的消息：" + message);
         try {
-////          获取已经登录的用户
-//          System.out.println("现在登录的用户信息："+webSocketMap);
             //将message转化成Message对象
             ObjectMapper mapper = new ObjectMapper();
-            Message mess = mapper.readValue(message, Message.class);
+            MessageDto mess = mapper.readValue(message, MessageDto.class);
 //          获取要将数据发送给的用户
             String toId = mess.getToId();
-            //          获取消息数据
+            //获取消息数据
             String data = mess.getMessage();
+//            将发送消息存入数据库
+//            加载驱动
+            Class.forName("com.mysql.cj.jdbc.Driver");
+//          获取数据连接
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/microlessonsback", "root", "liyanjun");
+//            操作数据库，实现增
+//            执行sql
+            String sql = "insert into message(u_id,to_id,message) values(?,?,?)";
+           PreparedStatement stmt = conn.prepareStatement(sql);
+//           传参
+            stmt.setString(1, this.userId);
+            stmt.setString(2, toId);
+            stmt.setString(3, data);
+            stmt.execute();
+            System.out.println(sql);
+//            将消息转为JSON格式
+            String messageJSON = JSONObject.toJSONString(mess);
             System.out.println("用户：" + this.userId + "->发送给用户：" + toId + "=>消息是：" + data);
 //          判断 接收的用户 是否登录
 //          如果 接收的用户 没有登录
             if (!webSocketMap.containsKey(toId)) {
 //                    将消息存入消息队列 rabbitmq
 //                System.out.println("存消息："+data+"用户是："+toId);
-                messageMap.put(toId,data);
-            }else {
+                messageMap.put(toId, messageJSON);
+            } else {
                 //          当 接收的用户 登录
 //         获取推送给指定用户的消息格式的数据
-                webSocketMap.get(toId).session.getBasicRemote().sendText(data);
+                webSocketMap.get(toId).session.getBasicRemote().sendText(messageJSON);
             }
         } catch (Exception e) {
             e.printStackTrace();

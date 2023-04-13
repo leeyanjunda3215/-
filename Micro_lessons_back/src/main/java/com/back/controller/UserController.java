@@ -91,6 +91,9 @@ public class UserController {
         return userService.updataUser(user);
     }
 
-
+    @PostMapping("/queryUserById")
+    public Result queryUserById(@RequestParam("id") Integer id){
+        return userService.queryUserById(id);
+    }
 
 }
