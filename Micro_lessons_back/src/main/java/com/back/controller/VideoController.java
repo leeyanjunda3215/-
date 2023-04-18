@@ -48,7 +48,7 @@ public class VideoController {
     public Result search(@RequestParam("currentPage") Integer currentPage,
                          @RequestParam("pageSize") Integer pageSize,
                          @RequestParam("search") String search) {
-        return videoService.search(currentPage,pageSize,search);
+        return videoService.search(currentPage, pageSize, search);
     }
 
     @PostMapping("/addTimes")
@@ -61,16 +61,17 @@ public class VideoController {
         return videoService.queryclassify();
     }
 
-//    @RequestParam("file") MultipartFile pic
+    //    @RequestParam("file") MultipartFile pic
     @PostMapping("/getVideoCover")
     public Result getVideoCover(@RequestParam("file") MultipartFile pic, String videoform) throws IOException {
-        return videoService.getVideoCover(pic,videoform);
+        return videoService.getVideoCover(pic, videoform);
     }
 
     @PostMapping("/getVideo")
-    public Result getVideo(@RequestParam("file") MultipartFile video,String videoform) throws Exception {
+    public Result getVideo(@RequestParam("file") MultipartFile video, String videoform) throws Exception {
         return videoService.getVideo(video,videoform);
     }
+
 
     @PostMapping("/getVideoInfo")
     public Result getVideoInfo(@RequestBody VideoForm videoinfo) {
@@ -78,46 +79,44 @@ public class VideoController {
     }
 
     @GetMapping("/getlastbypage")
-    public Result getLastByPage(@RequestParam("currentPage") Integer currentPage,@RequestParam("pageSize") Integer pageSize){
-        return videoService.getLastByPage(currentPage,pageSize);
+    public Result getLastByPage(@RequestParam("currentPage") Integer currentPage, @RequestParam("pageSize") Integer pageSize) {
+        return videoService.getLastByPage(currentPage, pageSize);
     }
 
     @PostMapping("/getClassifyByPage")
     public Result getClassifyByPage(@RequestParam("currentPage") Integer currentPage,
                                     @RequestParam("pageSize") Integer pageSize,
                                     @RequestParam("classify") String classify,
-                                    @RequestParam("tag") String tag){
-        return videoService.getClassifyByPage(currentPage,pageSize,classify,tag);
+                                    @RequestParam("tag") String tag) {
+        return videoService.getClassifyByPage(currentPage, pageSize, classify, tag);
     }
 
     @PostMapping("/getAllByPage")
     public Result getAllByPage(@RequestParam("currentPage") Integer currentPage,
-                               @RequestParam("pageSize") Integer pageSize){
-        return videoService.getAllByPage(currentPage,pageSize);
+                               @RequestParam("pageSize") Integer pageSize) {
+        return videoService.getAllByPage(currentPage, pageSize);
     }
 
     @GetMapping("/getVideoByUser")
-    public Result getVideoByUser(){
+    public Result getVideoByUser() {
         return videoService.getVideoByUser();
     }
 
     @PostMapping("/SearchKeyWord")
-    public Result SearchKeyWord(@RequestBody Map<String,String> KeyWord){
+    public Result SearchKeyWord(@RequestBody Map<String, String> KeyWord) {
         return videoService.SearchKeyWord(KeyWord);
     }
 
     @PostMapping("/DeleteVideo")
-    public Result DeleteVideo(@RequestBody Video video){
+    public Result DeleteVideo(@RequestBody Video video) {
         return videoService.DeleteVideo(video);
     }
 
     @PostMapping("/UpdateVideoName")
     public Result UpdateVideoName(@RequestParam("currentName") String currentName,
-                                  @RequestParam("updateName") String updateName){
-        return videoService.UpdateVideoName(currentName,updateName);
+                                  @RequestParam("updateName") String updateName) {
+        return videoService.UpdateVideoName(currentName, updateName);
     }
-
-
 
 
 }

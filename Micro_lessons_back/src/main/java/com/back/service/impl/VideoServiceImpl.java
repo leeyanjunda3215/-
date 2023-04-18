@@ -90,26 +90,44 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         String classify = split[1];
 //        视频名字
         String name = split[0];
-        File file = new File("D:\\liyanjun\\video\\" + classify + "\\" + name + "\\" + "1.png");
+        Integer id = UserHolder.getUser().getId();
+        String dir = name+"_"+id;
+        System.out.println("视频封面: " + name);
+        File file = new File("D:\\liyanjun\\video\\" + classify + "\\" + dir + "\\" + "1.png");
         if (!file.exists()) {
             file.mkdirs();
         }
         pic.transferTo(file);
-
         return Result.ok();
     }
 
 
     @Override
     public Result getVideo(MultipartFile video, String videoform) throws IOException {
-        //        获取视频分类和视频名
+//                获取视频分类和视频名
         String[] split = videoform.split(",");
 //        视频的分类
         String classify = split[1];
 //        视频名字
         String name = split[0];
+        Integer id = UserHolder.getUser().getId();
+        String dir = name+"_"+id;
         System.out.println(video.getOriginalFilename());
-        File file = new File("D:\\liyanjun\\video\\" + classify + "\\" + name + "\\1.mp4");
+        File fileD = new File("D:\\liyanjun\\video\\" + classify + "\\" + dir);
+        if (!fileD.exists()) {
+            fileD.mkdirs();
+        }
+//        File[] files = fileD.listFiles();
+        List<String> files = new ArrayList<>();
+        String[] list = fileD.list();
+        for (String s :list) {
+            if (s.endsWith(".mp4")){
+                files.add(s);
+            }
+        }
+        int filename = files.size()+1;
+        System.out.println(filename);
+        File file = new File("D:\\liyanjun\\video\\" + classify + "\\" + dir + "\\"+filename+".mp4");
         if (!file.exists()) {
             file.mkdirs();
         }
@@ -126,10 +144,11 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         String brief = videoinfo.getBrief();
 //  获取当前的用户id
         Integer id = UserHolder.getUser().getId();
+        String dir = name+"_"+id;
 //       封面图片地址
-        String coverpath = "http://127.0.0.1:9999/" + classify.get(0) + "/" + name + "/1.png";
+        String coverpath = "http://127.0.0.1:9999/" + classify.get(0) + "/" + dir + "/1.png";
 //        视频地址
-        String videopath = "http://127.0.0.1:9999/" + classify.get(0) + "/" + name;
+        String videopath = "http://127.0.0.1:9999/" + classify.get(0) + "/" + dir;
 //      获取tag
         String tag = (String) classify.get(1);
 //        封装实体类
@@ -204,14 +223,14 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
 //        获取当前用户
         Integer id = UserHolder.getUser().getId();
 
-        List<Video> videos = videoService.query().eq("is_delete",1).eq("user_id", id).list();
+        List<Video> videos = videoService.query().eq("is_delete", 1).eq("user_id", id).list();
         return Result.ok(videos);
     }
 
     @Override
     public Result SearchKeyWord(Map<String, String> keyWord) {
 //        获取搜索的关键词
-        String  keyword = keyWord.get("search");
+        String keyword = keyWord.get("search");
         List<Video> videos = videoMapper.getVideoByKeyWord("%" + keyword + "%");
         return Result.ok(videos);
     }
@@ -221,8 +240,8 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         System.out.println(video);
 //        逻辑删除 这个视频
         UpdateWrapper wrapper = new UpdateWrapper();
-        wrapper.eq("v_id",video.getvId());
-        wrapper.set("is_delete",0);
+        wrapper.eq("v_id", video.getvId());
+        wrapper.set("is_delete", 0);
         videoService.update(wrapper);
         return Result.ok();
     }
@@ -231,8 +250,8 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     public Result UpdateVideoName(String currentId, String updateName) {
 //        去数据库更改
         UpdateWrapper wrapper = new UpdateWrapper();
-        wrapper.eq("v_id",currentId);
-        wrapper.set("v_Name",updateName);
+        wrapper.eq("v_id", currentId);
+        wrapper.set("v_Name", updateName);
         videoService.update(wrapper);
         return Result.ok();
     }

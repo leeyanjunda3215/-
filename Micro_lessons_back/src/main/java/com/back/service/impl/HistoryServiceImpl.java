@@ -53,6 +53,7 @@ public class HistoryServiceImpl extends ServiceImpl<HistoryMapper, History> impl
         history.setvId(vId);
         history.setuId(uid);
         history.setIsDelete(1);
+        System.out.println("观看历史："+history);
         historyService.save(history);
         return Result.ok();
     }
@@ -99,6 +100,7 @@ public class HistoryServiceImpl extends ServiceImpl<HistoryMapper, History> impl
             int i1 = i.getvId();
             Video video = videoService.query().eq("is_delete", 1).eq("v_id", i1).one();
             vIdList.add(video);
+            System.out.println("用户："+vIdList);
         }
         return Result.ok(vIdList);
     }
