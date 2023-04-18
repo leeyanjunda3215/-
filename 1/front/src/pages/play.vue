@@ -17,9 +17,12 @@
       <video width="70%" height="40%" controls :src="ep" type="video/mp4"></video>
       <!-- <a :href="video.videopath">点击播放</a> -->
       <div class="episodes">
-        <div class="block" v-for="i in video.episodes">
-          <button @click="ChangeEP(i)">{{ i }}</button>
+        <div v-if="!(video.episodes == 1)">
+          <div class="block" v-for="i in video.episodes">
+            <button @click="ChangeEP(i)">{{ i }}</button>
+          </div>
         </div>
+
       </div>
     </div>
 

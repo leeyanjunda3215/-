@@ -78,9 +78,11 @@
         <el-tab-pane label="喜欢" name="second">
           <!-- {{ likes }} -->
           <div v-if="!(likes.length == 0)">
-            <div class="cover" v-for="item in likes">
-              <img :src="item.cover" alt="">
-              <p>{{ item.vName }}</p>
+            <div v-for="item in likes">
+              <div class="cover" @click="Gotoplay(item)">
+                <img :src="item.cover" alt="">
+                <p>{{ item.vName }}</p>
+              </div>
             </div>
           </div>
           <el-empty v-else description="暂无作品"></el-empty>
@@ -90,9 +92,12 @@
         <el-tab-pane label="收藏" name="third">
           <!-- {{ collectiones }} -->
           <div v-if="!(collectiones.length == 0)">
-            <div class="cover" v-for="item in collectiones">
-              <img :src="item.cover" alt="">
-              <p>{{ item.vName }}</p>
+            <div v-for="item in collectiones">
+              <div class="cover" @click="Gotoplay(item)">
+                <img :src="item.cover" alt="">
+                <p>{{ item.vName }}</p>
+              </div>
+
             </div>
           </div>
 
@@ -102,9 +107,11 @@
         <el-tab-pane label="观看历史" name="fourth">
           <el-empty description="暂无观看" v-if="historyvideo.length == 0"></el-empty>
           <div v-else>
-            <div class="cover" v-for="item in historyvideo">
-              <img :src="item.cover" alt="">
-              <p>{{ item.vName }}</p>
+            <div v-for="item in historyvideo">
+              <div class="cover" @click="Gotoplay(item)">
+                <img :src="item.cover" alt="">
+                <p>{{ item.vName }}</p>
+              </div>
             </div>
           </div>
         </el-tab-pane>
@@ -164,6 +171,15 @@ export default {
     this.querycorrentUser()
   },
   methods: {
+    Gotoplay(i) {
+      // 将跳转前的视频信息添加到历史记录中
+      this.$axios.post("http://localhost:8082/history/addhistory", i).then(resp => {
+
+      })
+
+      this.$store.state.tab.videopath = i;
+      location.href = "http://localhost:8081/#/play"
+    },
     // 查询现在的用户
     querycorrentUser() {
       this.$axios.get("http://localhost:8082/user/me").then(resp => {
@@ -327,7 +343,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .head {
   display: flex;
   align-items: center;
@@ -381,12 +397,23 @@ export default {
 .cover {
   display: flex;
   align-items: center;
+  border: 1px solid #C0C0C0;
+  margin-top: 0%;
 
   img {
     width: 150px;
     height: 100px;
-    margin-bottom: 2%;
-    margin-right: 4%;
+    margin-right: 4vh;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    margin-left: 1vh;
+    // margin-bottom: 2%;
+    // margin-right: 4%;
   }
+}
+
+
+.cover:hover {
+  background-color: #dcdcdc;
 }
 </style>

@@ -9,13 +9,21 @@
           <img @click="Gotohome()" src="../assets/sign.png" alt="头像">
           <span class="title" @click="Gotohome()">微课</span>
 
-          <p class="hover" @click="Gotohome()">首页</p>
+          <div class="homebox">
+            <p id="home" class="home" @click="Gotohome()">首页</p>
+          </div>
 
-          <p class="hover" @click="Gotolast()">最新视频</p>
+          <div class="lastbox">
+            <p id="last" class="last" @click="Gotolast()">最新视频</p>
+          </div>
 
-          <p class="hover" @click="GotoClassify()">视频分类</p>
+          <div class="classifybox">
+            <p id="classify" class="classify" @click="GotoClassify()">视频分类</p>
+          </div>
 
-          <p class="hover" @click="GotoCollection()">视频合集</p>
+          <div class="collectionbox">
+            <p id="collection" class="collection" @click="GotoCollection()">视频合集</p>
+          </div>
 
         </div>
 
@@ -73,33 +81,57 @@ export default {
 
     this.queryUser()
   },
-  components: {
-    search
-  },
   methods: {
     Gotolast() {
       location.href = "http://localhost:8081/#/last"
+      let home = document.getElementById("home")
+      let last = document.getElementById("last")
+      let classify = document.getElementById("classify")
+      let collection = document.getElementById("collection")
+      home.style.color = "#fff"
+      last.style.color = "#409EFF"
+      classify.style.color = "#fff"
+      collection.style.color = "#fff"
     },
     Gotochat() {
       if (this.user.length == 0) {
-        this.$message.error("请登录");
+        this.$message({ showClose: true, message: "请登录", type: 'error' })
       } else {
         location.href = "http://localhost:8081/#/chat"
       }
     },
     GotoCollection() {
       location.href = "http://localhost:8081/#/collection"
+      let home = document.getElementById("home")
+      let last = document.getElementById("last")
+      let classify = document.getElementById("classify")
+      let collection = document.getElementById("collection")
+      home.style.color = "#fff"
+      last.style.color = "#fff"
+      classify.style.color = "#fff"
+      collection.style.color = "#409EFF"
     },
     GotoClassify() {
       location.href = "http://localhost:8081/#/classify"
+      let home = document.getElementById("home")
+      let last = document.getElementById("last")
+      let classify = document.getElementById("classify")
+      let collection = document.getElementById("collection")
+      home.style.color = "#fff"
+      last.style.color = "#fff"
+      classify.style.color = "#409EFF"
+      collection.style.color = "#fff"
     },
     Gotoupload() {
       if (this.user.length == 0) {
-        this.$message.error("请登录");
+        // this.$message.error("请登录");
+        this.$message({ showClose: true, message: "请登录", type: 'error' })
         // this.$message({ showClose: true, message: "请登录", type: error })
       } else {
         location.href = "http://localhost:8081/#/upload"
       }
+
+      // location.href = "http://localhost:8081/#/upload"
 
     },
     Gotoplay(i) {
@@ -162,36 +194,39 @@ p {
 }
 
 .header {
-  width: 100%;
-  height: 100%;
-  height: 80px;
+  width: auto;
+  height: 8vh;
   background-color: #475669;
   display: flex;
   align-content: center;
   align-items: center;
 
   .main {
-    width: 50%;
-    margin-left: 10%;
-    margin-bottom: 15px;
+    margin-left: 5vh;
     display: flex;
     align-items: center;
+    margin-bottom: 3vh;
 
     img {
       width: 50px;
       height: 50px;
       border-radius: 50%;
-      margin-right: 20px;
+      margin-right: 2vh;
+      margin-left: 15vh;
     }
 
     img:hover {
-      margin-bottom: 5px;
+      margin-top: 5px;
     }
 
     .title {
-      // margin-right: 20px;
-      font-size: 34px;
+      margin-right: 2vh;
+      font-size: 45px;
       font-weight: 600px;
+    }
+
+    .title:hover {
+      margin-bottom: 5px;
     }
 
     span {
@@ -199,36 +234,79 @@ p {
       margin-right: 50px;
     }
 
-    p {
-      color: #fff;
-      margin-right: 20px;
+    .homebox {
+      height: 11vh;
+      width: 15vh;
+
+      .home {
+        color: #fff;
+        margin-left: 5vh;
+        margin-top: 5vh;
+        font-size: 20px;
+      }
+
+      .home:hover {
+        color: #409EFF;
+      }
     }
 
-    p:hover {
-      margin-top: 5px;
-      color: #409EFF;
-      // font-size: 28px;
+
+    .lastbox {
+      height: 11vh;
+      width: 15vh;
+
+      .last {
+        color: #fff;
+        margin-left: 4vh;
+        margin-top: 5vh;
+        font-size: 20px;
+      }
+
+      .last:hover {
+        color: #409EFF;
+      }
     }
 
-    p:active {
-      margin-top: 5px;
-      color: #409EFF;
-      // font-size: 28px;
+    .classifybox {
+      height: 11vh;
+      width: 15vh;
+
+      .classify {
+        color: #fff;
+        margin-left: 4vh;
+        margin-top: 5vh;
+        font-size: 20px;
+      }
+
+      .classify:hover {
+        color: #409EFF;
+      }
     }
 
-    p:focus {
-      margin-top: 5px;
-      color: #409EFF;
-      // font-size: 28px;
+    .collectionbox {
+      height: 11vh;
+      width: 15vh;
+
+      .collection {
+        color: #fff;
+        margin-left: 4vh;
+        margin-top: 5vh;
+        font-size: 20px;
+      }
+
+      .collection:hover {
+        color: #409EFF;
+      }
     }
   }
 
   .seach {
-    width: 20%;
+    margin-left: 10vh;
+    width: 20vh;
   }
 
   .message {
-    margin-left: 20%;
+    margin-left: 15vh;
 
     .el-icon-chat-dot-round {
       color: #fff;
@@ -243,8 +321,7 @@ p {
   }
 
   .upload {
-    margin-left: 2%;
-    margin-right: 5%;
+    margin-left: 3vh;
 
     .el-icon-upload {
       color: #fff;
@@ -259,7 +336,8 @@ p {
 
   .headimg {
     width: 6%;
-    margin-right: 10%;
+    margin-left: 5vh;
+    // margin-right: 10%;
 
     .userimg {
       margin-right: 20px;
@@ -272,6 +350,7 @@ p {
     }
 
     .unlogin {
+      font-size: 20px;
       color: #fff;
       margin-right: 20px;
     }

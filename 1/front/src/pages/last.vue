@@ -2,7 +2,7 @@
     <el-main>
         <div class="last">
             <div class="mainbodylast">
-                <div class="cover" v-for="item in video">
+                <div class="coverlast" v-for="item in video">
                     <div class="showAndText">
                         <img class="show" style="cursor: pointer;" :src="item.cover" @click="Gotoplay(item)" />
                         <p>{{ item.vName }}</p>
@@ -36,6 +36,15 @@ export default {
         this.gelastByPage()
     },
     methods: {
+        Gotoplay(i) {
+            // 将跳转前的视频信息添加到历史记录中
+            this.$axios.post("http://localhost:8082/history/addhistory", i).then(resp => {
+
+            })
+
+            this.$store.state.tab.videopath = i;
+            location.href = "http://localhost:8081/#/play"
+        },
         gelastByPage() {
             this.$axios.get("http://localhost:8082/video/getlastbypage?currentPage=" + this.currentPage + "&pageSize=" + this.pageSize).then(resp => {
                 // console.log(resp.data.data); 
@@ -72,11 +81,11 @@ export default {
 
     .mainbodylast {
         height: 80vh;
-        overflow: scroll;
+        // overflow: scroll;
 
-        .cover {
-            margin-top: 2vh;
-            margin-left: 6.5vh;
+        .coverlast {
+            margin-top: 4vh;
+            margin-left: 6vh;
             display: inline-block;
             align-content: center;
             align-items: center;
@@ -87,8 +96,8 @@ export default {
 
             .show {
                 margin-right: 5%;
-                width: 255px;
-                height: 150px;
+                width: 230px;
+                height: 120px;
                 padding: 10px;
                 padding-left: 0;
                 padding-right: 20px;

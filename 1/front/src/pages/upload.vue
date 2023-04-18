@@ -37,20 +37,28 @@
 
             <!-- action="http://localhost:8082/video/getVideoCover"  -->
             <div v-if="active == 1">
-                <el-upload :http-request="uploadimg" :limit="1" :on-success="uploadSuccess" :file-list="imageList"
-                    accept=".png" list-type="picture-card">
+                <h3>上传视频封面：</h3>
+                <el-upload :http-request="uploadimg" :limit="1" :on-success="uploadSuccess" accept=".png"
+                    list-type="picture-card">
                     <i class="el-icon-plus"></i>
                     <div class="el-upload__tip" slot="tip">上传视频封面, 且不超过500kb</div>
                 </el-upload>
                 <div style="width: 20px;height: 20px;">
 
                 </div>
-
-                <el-upload :http-request="uploadvide" :limit="1" :file-list="imageList" accept=".mp4"
-                    list-type="picture-card">
+                <h3>上传视频：</h3>
+                <!-- <el-upload multiple class="upload-demo" drag :http-request="uploadvide" accept=".mp4">
                     <i class="el-icon-plus"></i>
+                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                     <div class="el-upload__tip" slot="tip">上传视频文件, 不超过2G</div>
+                </el-upload> -->
+
+                <el-upload class="upload-demo" drag :http-request="uploadvide" accept=".mp4">
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                    <div class="el-upload__text">传视频文件, 大小不超过2G</div>
                 </el-upload>
+
             </div>
 
             <div v-if="active == 2">
@@ -310,14 +318,6 @@ export default {
             formvideo: new FormData(),
             arrvideo: [],
             value: 0,
-            uploadData: {
-                //这里面放额外携带的参数
-            },
-            // 请求头
-            myheaders: {
-                token: "Authorization",
-                'Content-Type': 'multipart/form-data'
-            },
             //文件上传的路径
             uploadUrl: "http://localhost:8082/video/getVideo" //文件上传的路径
 
@@ -344,6 +344,7 @@ export default {
             this.arrvideo.push(this.videoform.vName)
             this.arrvideo.push(this.videoform.classify)
             this.formvideo.append("file", param.file)
+            console.log(this.videolist);
             this.formvideo.append("videoform", this.arrvideo)
             this.$axios({
                 method: "post",
@@ -355,7 +356,7 @@ export default {
                 }
             })
             // 区块链 上传 视频名称
-            this.$axios.get("http://192.168.21.1:8082/fisco/set?val=" + this.videoform.vName)
+            // this.$axios.get("http://192.168.21.1:8082/fisco/set?val=" + this.videoform.vName)
         },
         onSubmit() {
             this.active++

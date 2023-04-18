@@ -294,6 +294,15 @@ export default {
         this.getCollectionByPage()
     },
     methods: {
+        Gotoplay(i) {
+            // 将跳转前的视频信息添加到历史记录中
+            this.$axios.post("http://localhost:8082/history/addhistory", i).then(resp => {
+
+            })
+
+            this.$store.state.tab.videopath = i;
+            location.href = "http://localhost:8081/#/play"
+        },
         getCollectionByPage() {
             var params = new URLSearchParams();
             params.append("currentPage", this.currentPage)

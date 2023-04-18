@@ -57,6 +57,7 @@ export default {
         this.queryimg()
     },
     methods: {
+
         // 视频暂停
         // VideoPuse() {
         //     var video = document.getElementById("video")
