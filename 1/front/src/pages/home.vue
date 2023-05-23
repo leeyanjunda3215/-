@@ -2,12 +2,30 @@
     <el-main>
         <div class="main">
             <!-- 轮播图 -->
-            <div class="carousel">
-                <el-carousel :interval="2000" type="card" height="200px">
-                    <el-carousel-item v-for="item in carousel" :key="item.id">
-                        <img :src="item.cover" @click="Gotoplay(item)" alt="轮播">
-                    </el-carousel-item>
-                </el-carousel>
+            <div class="head">
+                <div class="carousel">
+                    <el-carousel>
+                        <el-carousel-item v-for="item in carousel" :key="item.id">
+                            <div class="allcarousel">
+                                <img :src="item.cover" @click="Gotoplay(item)" alt="轮播">
+                                <!-- <p>{{ item.vName }}</p> -->
+                            </div>
+                        </el-carousel-item>
+                    </el-carousel>
+                </div>
+
+
+                <div class="recommend">
+                    <p>今日推荐</p>
+                    <div class="cover" v-for="(item, index) in recommend">
+                        <div class="showAndText">
+                            <!-- <img class="show" style="" :src="item.cover"  /> -->
+                            <video id="video" class="show" muted :src="item.videopath + '/1.mp4'" :poster="item.cover"
+                                @click="Gotoplay(item)"></video>
+                            <p>{{ item.vName }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
 
@@ -48,13 +66,15 @@ export default {
             path: [],
             carousel: [],
             classify: [],
-
+            // 推荐的视频（首页视频）
+            recommend: []
         }
     },
     created() {
         this.queryclassify()
         this.querypath()
         this.queryimg()
+        this.querySystemrecommend()
     },
     methods: {
 
@@ -68,6 +88,17 @@ export default {
         //     var video = document.getElementById("video")
         //     video.play()
         // },
+
+        querySystemrecommend() {
+            this.$axios.get("http://localhost:8082/video/recommend").then(resp => {
+                if (resp.data.success == true) {
+                    console.log(resp.data.data);
+                    this.recommend = resp.data.data
+                }
+            })
+        },
+
+
         // 查询所有分类
         queryclassify() {
             this.$axios.get("http://localhost:8082/video/queryclassify").then(resp => {
@@ -95,7 +126,7 @@ export default {
             this.$axios.get("http://localhost:8082/video/getCarousel").then(resp => {
                 if (resp.data.success == true) {
                     this.carousel = resp.data.data
-                    // console.log(this.carousel);
+                    console.log(this.carousel);
                 }
             })
         }
@@ -107,20 +138,75 @@ export default {
 .main {
     margin-top: 20px;
 
-    .carousel {
-        width: 50%;
-        margin-left: 26%;
+    .head {
+        display: flex;
 
-        img {
-            width: 350px;
-            height: 200px;
-            padding: 10px;
-            padding-left: 0;
-            padding-right: 20px;
-            object-fit: fill;
+        .carousel {
+            margin-top: 50px;
+            width: 590px;
+            height: 300px;
+
+            // width: 255px;
+            // height: 150px;
+            margin-left: 10%;
+
+            .allcarousel {
+                width: 590px;
+                height: 300px;
+                position: relative;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    padding: 10px;
+                    padding-left: 0;
+                    padding-right: 20px;
+                    // object-fit: fill;
+                }
+
+                p {
+                    color: white;
+                    position: absolute;
+                    left: 1rem;
+                    bottom: 2rem;
+                }
+            }
+
+
         }
 
+        .recommend {
+            margin-left: 40px;
+            width: 1240px;
+            height: 420px;
+            overflow: hidden;
+
+            .cover {
+                margin-right: 2%;
+                display: inline-block;
+                align-content: center;
+                align-items: center;
+
+                .showAndText {
+                    text-align: center;
+                }
+
+                .show {
+                    cursor: pointer;
+                    margin-right: 5%;
+                    width: 255px;
+                    height: 150px;
+                    padding: 10px;
+                    padding-left: 0;
+                    padding-right: 20px;
+                    object-fit: fill;
+                }
+            }
+        }
     }
+
+
+
 
     .center {
 

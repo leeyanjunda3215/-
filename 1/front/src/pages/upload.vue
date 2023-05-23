@@ -356,7 +356,7 @@ export default {
                 }
             })
             // 区块链 上传 视频名称
-            // this.$axios.get("http://192.168.21.1:8082/fisco/set?val=" + this.videoform.vName)
+            this.$axios.get("http://192.168.21.1:8082/fisco/set?val=" + this.videoform.vName)
         },
         onSubmit() {
             this.active++

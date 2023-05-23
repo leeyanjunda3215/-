@@ -24,13 +24,13 @@ export default new Router({
       path: '/', //主路由
       name: 'home',
       component: home,
-      children:[
-         //嵌套子路由
-         {
-          path: '/start',
-          name: 'start',
-          component: start
-        },
+      children: [
+        //嵌套子路由
+        //  {
+        //   path: '/start',
+        //   name: 'start',
+        //   component: start
+        // },
         {
           path: '/tv',
           name: 'tv',
@@ -63,6 +63,6 @@ export default new Router({
       name: 'login',
       component: login,
     }
-    
+
   ]
 })

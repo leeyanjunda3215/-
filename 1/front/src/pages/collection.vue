@@ -38,8 +38,8 @@
                 </div>
                 <div class="block" v-if="!(total == 0)">
                     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                        :current-page="currentPage" :page-sizes="[5, 10, 15]" :page-size="pageSize"
-                        layout="total, sizes, prev, pager, next, jumper" :total="total">
+                        :current-page="currentPage" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
+                        :total="total">
                     </el-pagination>
                 </div>
             </div>
@@ -284,7 +284,7 @@ export default {
             ],
             select1: "",
             select2: "",
-            pageSize: 10,
+            pageSize: 5,
             total: 0,
             currentPage: 1,
             video: []
@@ -343,7 +343,7 @@ export default {
 }
 </script>   
    
-<style lang="less">
+<style lang="less" scoped>
 .mainbody {
     margin-left: 20vh;
     width: 150vh;

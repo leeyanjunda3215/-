@@ -11,7 +11,7 @@
             </div>
             <div class="block">
                 <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                    :current-page="currentPage" :page-sizes="[5, 10, 15]" :page-size="pageSize"
+                    :current-page="currentPage" :page-sizes="[5, 10]" :page-size="pageSize"
                     layout="total, sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
             </div>
@@ -26,7 +26,7 @@ export default {
     name: 'last',
     data() {
         return {
-            pageSize: 10,
+            pageSize: 5,
             total: 100,
             currentPage: 1,
             video: []
@@ -81,7 +81,7 @@ export default {
 
     .mainbodylast {
         height: 80vh;
-        // overflow: scroll;
+        overflow: scroll;
 
         .coverlast {
             margin-top: 4vh;
@@ -108,7 +108,7 @@ export default {
 
 
     .block {
-        margin-left: 60vh;
+        margin-left: 40vh;
     }
 }
 </style>

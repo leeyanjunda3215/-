@@ -17,9 +17,17 @@
 
 
             <div class="box-left">
-                <div class="chatwindows">
+                <div id="chatwindows" class="chatwindows">
                     <div></div>
                     <div v-for="i in message">
+                        <div class="other" v-if="i.type == 'other'">
+                            <div class="other_img">
+                                <img :src="otheruser.headimg" alt="">
+                            </div>
+                            <div class="other_content">
+                                <p>{{ i.message }}</p>
+                            </div>
+                        </div>
                         <div class="me" v-if="i.type == 'me'">
                             <div class="me_content">
                                 <p>{{ i.message }}</p>
@@ -31,17 +39,10 @@
 
                             </div>
                         </div>
-                        <div class="other" v-if="i.type == 'other'">
-                            <div class="other_img">
-                                <img :src="otheruser.headimg" alt="">
-                            </div>
-                            <div class="other_content">
-                                <p>{{ i.message }}</p>
-                            </div>
-                        </div>
                     </div>
 
                 </div>
+
                 <div class="chatinput">
                     <el-input v-model="input" placeholder="请输入内容" @keyup.enter.native="sendMessage()">
                     </el-input>
@@ -85,6 +86,10 @@ export default {
             socket: "",
         };
     },
+    updated() {
+        let window1 = document.getElementById("chatwindows")
+        window1.scrollTop = window1.scrollHeight;
+    },
     mounted() {
         var temp = this.$store.state.tab.user
         if (!(temp.length == 0)) {
@@ -120,6 +125,7 @@ export default {
                 if (resp.data.success = true) {
                     // console.log(resp.data.data);
                     this.chatuser = resp.data.data
+
                 }
             })
         },
@@ -193,6 +199,10 @@ export default {
         },
         // 向服务器发送消息
         sendMessage() {
+
+            let window = document.getElementById("chatwindows")
+            window.scrollTop = window.scrollHeight;
+
             // 发送消息的用户
             // var user = this.user
             // 被发送消息的用户
@@ -214,7 +224,6 @@ export default {
                 this.message.push(me)
                 // 重置内容
                 this.input = ""
-
             }
 
         },
@@ -316,16 +325,16 @@ export default {
         height: 80vh;
         border-left: 1px solid #000;
 
-        .chatwindows::-webkit-scrollbar {
-            display: none;
-        }
+        // .chatwindows::-webkit-scrollbar {
+        //     display: none;
+        // }
 
         // border: 1px solid #000;
         .chatwindows {
             width: 130vh;
             height: 70vh;
             // background-color: aqua;
-            overflow: auto;
+            overflow-y: scroll;
 
             .me {
                 margin-top: 2vh;
@@ -339,9 +348,11 @@ export default {
                     width: 40vh;
                     height: auto;
 
+
                     p {
                         float: right;
                         font-size: 27px;
+                        // background: #04BE02;
                     }
                 }
 
@@ -365,6 +376,7 @@ export default {
                 height: auto;
                 display: flex;
 
+
                 .other_content {
                     margin-left: 1vh;
                     width: 30vh;
@@ -374,6 +386,7 @@ export default {
                         font-size: 27px;
                         word-wrap: break-word;
                         word-break: break-all;
+                        // background: #f1f1f1;
                     }
                 }
 

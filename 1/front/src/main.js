@@ -10,18 +10,21 @@ import 'element-ui/lib/theme-chalk/index.css';
 import axios from 'axios';
 import store from './store';
 
+import VueDPlayer from "vue-dplayer";
+import 'vue-dplayer/dist/vue-dplayer.css';
+
+Vue.use(VueDPlayer);
 
 //将axios挂载到原型链上
 Vue.prototype.$axios = axios
-
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 
- // request拦截器，将用户token放入头中
+// request拦截器，将用户token放入头中
 axios.interceptors.request.use(
   config => {
-      if (sessionStorage.getItem("token")) config.headers['authorization'] = sessionStorage.getItem("token")
-      return config
+    if (sessionStorage.getItem("token")) config.headers['authorization'] = sessionStorage.getItem("token")
+    return config
   }
 )
 

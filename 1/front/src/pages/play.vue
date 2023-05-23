@@ -13,8 +13,9 @@
     </div>
 
     <div class="video1">
-      <!-- <video width="1080px" height="620px" controls :src="ep" type="video/mp4"></video> -->
-      <video width="70%" height="40%" controls :src="ep" type="video/mp4"></video>
+      <!-- <video width="800px" height="620px" controls :src="ep" type="video/mp4"></video> -->
+      <video class="dplayer" controls :src="ep" type="video/mp4"></video>
+      <!-- <d-player class="dplayer" id="player" :options="options"></d-player> -->
       <!-- <a :href="video.videopath">点击播放</a> -->
       <div class="episodes">
         <div v-if="!(video.episodes == 1)">
@@ -22,7 +23,6 @@
             <button @click="ChangeEP(i)">{{ i }}</button>
           </div>
         </div>
-
       </div>
     </div>
 
@@ -121,7 +121,6 @@
           <el-divider class="d2"></el-divider>
         </div>
       </div>
-
     </div>
 
   </el-main>
@@ -129,11 +128,12 @@
 
 
 <script>
-
 export default {
   name: 'play',
   data() {
     return {
+      // 是否消息
+      // isDot: true,
       video: [],
       videoplay: [],
       ep: "",
@@ -159,7 +159,32 @@ export default {
       replyarea: "",
       // 回复的评论id
       tocId: "",
-      comment: []
+      comment: [],
+      // options: {
+      //   container: document.getElementById("player"),
+      //   theme: '#b7daff',  // 风格颜色，例如播放条，音量条的颜色
+      //   loop: false,  // 是否自动循环
+      //   lang: 'zh-cn',  // 语言，'en', 'zh-cn', 'zh-tw'
+      //   screenshot: true,  // 是否允许截图（按钮），点击可以自动将截图下载到本地
+      //   hotkey: true,  // 是否支持热键，调节音量，播放，暂停等
+      //   preload: 'auto',  // 自动预加载
+      //   volume: 0.7,  // 初始化音量
+      //   video: {
+      //     url: "",
+      //     type: "video/mp4",
+      //   },
+      //   // danmaku: { //弹幕
+      //   //   id: '9E2E3368B56CDBB4',
+      //   //   api: 'http://api.prprpr.me/dplayer/',
+      //   //   maximum: 1000,
+      //   //   user: 'DIYgod',
+      //   //   bottom: '15%',
+      //   //   unlimited: true,
+      //   //   speedRate: 0.5,
+      //   // },
+      // },
+
+
 
     }
   },
@@ -178,7 +203,12 @@ export default {
     this.isliked()
     this.iscollctiond()
   },
+  // mounted() {
+  //   let video = document.querySelector(".dplayer-video")
+  //   video.removeAttribute("crossorigin")
+  // },
   methods: {
+
     // 跳转到用户信息
     Gotoinfo(i) {
       this.$router.push({ path: '/info', query: { id: i } })
@@ -404,6 +434,7 @@ export default {
       for (let i = 1; i <= this.video.episodes; i++) {
         this.videoplay.push(this.video.videopath + "/" + i + ".mp4")
       }
+      // this.options.video.url = this.videoplay[0]
       this.ep = this.videoplay[0]
     },
     queryVideoUser() {
@@ -419,6 +450,7 @@ export default {
     },
     // 换集
     ChangeEP(i) {
+      // this.options.video.url = this.videoplay[i]
       this.ep = this.videoplay[i]
     }
   }
@@ -433,14 +465,14 @@ template {
 }
 
 .user {
-  margin-left: 85%;
-  margin-top: 1%;
+  margin-left: 150vh;
+  margin-top: 1vh;
   display: flex;
   align-items: center;
   align-content: center;
 
   .userHoverInfo {
-    margin-top: 1%;
+    margin-top: 1vh;
     position: absolute;
     display: flex;
     width: 230px;
@@ -451,11 +483,12 @@ template {
     border-radius: 50%;
   }
 
-  img:hover {
-    width: 55px;
-  }
+  // img:hover {
+  //   width: 55px;
+  // }
 
   .tools_btn {
+    margin-top: 1vh;
     display: flex;
   }
 
@@ -475,11 +508,18 @@ template {
   // margin-right: 15%;
   display: flex;
 
+  .dplayer {
+    width: 110vh;
+    height: 60vh;
+  }
+
   .episodes {
     margin-left: 2%;
     margin-right: 8%;
-    height: auto;
+    width: 45vh;
+    height: 60vh;
     background-color: #f1f2f3;
+    overflow: scroll;
 
     .block {
       display: inline-block;
@@ -493,6 +533,11 @@ template {
         // border: box-sizing;
       }
     }
+  }
+
+  .episodes::-webkit-scrollbar {
+    width: 0;
+    height: 0;
   }
 }
 
