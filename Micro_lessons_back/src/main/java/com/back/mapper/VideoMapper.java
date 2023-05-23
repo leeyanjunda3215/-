@@ -24,6 +24,11 @@ public interface VideoMapper extends BaseMapper<Video> {
 
     void addTimes(@Param("id") Integer id);
 
+    @Select("select * from video where v_id in (\n" +
+            "    select v_id from liked where liked=1 or collectioned =1\n" +
+            "    ) order by times desc limit 6")
+    List<Video> queryrecommend();
+
     @Select("select * from video where is_delete = 1 and v_name like  #{search} order by times DESC limit #{begin},#{size}")
     List<Video> searchbyPage(@Param("begin") int begin, @Param("size") int size, @Param("search") String search);
 

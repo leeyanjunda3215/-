@@ -4,6 +4,7 @@ import com.back.dto.PageBean;
 import com.back.dto.VideoForm;
 import com.back.entity.Video;
 import com.back.mapper.VideoMapper;
+import com.back.service.ILikeService;
 import com.back.service.IVideoService;
 import com.back.util.Result;
 import com.back.util.UserHolder;
@@ -254,6 +255,13 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         wrapper.set("v_Name", updateName);
         videoService.update(wrapper);
         return Result.ok();
+    }
+
+
+    @Override
+    public Result getSystemrecommend() {
+        List<Video> videos = videoMapper.queryrecommend();
+        return Result.ok(videos);
     }
 
 

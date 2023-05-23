@@ -3,7 +3,9 @@ package com.back.controller.FsicoBcos;
 import com.back.fisco.HelloWorld;
 import org.fisco.bcos.sdk.BcosSDK;
 import org.fisco.bcos.sdk.client.Client;
+import org.fisco.bcos.sdk.client.protocol.response.BcosBlock;
 import org.fisco.bcos.sdk.client.protocol.response.BlockNumber;
+import org.fisco.bcos.sdk.crypto.CryptoSuite;
 import org.fisco.bcos.sdk.crypto.keypair.CryptoKeyPair;
 import org.fisco.bcos.sdk.model.TransactionReceipt;
 import org.springframework.context.ApplicationContext;
@@ -82,6 +84,7 @@ public class BcosController {
         ApplicationContext context = new ClassPathXmlApplicationContext("classpath:fisco-config.xml");
         BcosSDK bcosSDK = context.getBean(BcosSDK.class);
         Client client = bcosSDK.getClient(Integer.valueOf(1));
+
         BlockNumber blockNumber = client.getBlockNumber();
         return "getBlockNumber: "+blockNumber.getBlockNumber().toString();
 //        return "";

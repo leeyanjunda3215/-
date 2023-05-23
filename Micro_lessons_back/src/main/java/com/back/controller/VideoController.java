@@ -44,6 +44,11 @@ public class VideoController {
         return videoService.getCarousel();
     }
 
+    @GetMapping("/recommend")
+    public Result getSystemrecommend(){
+        return videoService.getSystemrecommend();
+    }
+
     @PostMapping("/search")
     public Result search(@RequestParam("currentPage") Integer currentPage,
                          @RequestParam("pageSize") Integer pageSize,
@@ -71,6 +76,12 @@ public class VideoController {
     public Result getVideo(@RequestParam("file") MultipartFile video, String videoform) throws Exception {
         return videoService.getVideo(video,videoform);
     }
+
+//  判断上传的视频是否已经上传
+//    @PostMapping("/getVideoName")
+//    public Result getVideoName(@){
+//        return videoService.getVideoName();
+//    }
 
 
     @PostMapping("/getVideoInfo")
@@ -118,5 +129,9 @@ public class VideoController {
         return videoService.UpdateVideoName(currentName, updateName);
     }
 
+//    @GetMapping("/danmuku")
+//    public Result danmuku(){
+//        return
+//    }
 
 }

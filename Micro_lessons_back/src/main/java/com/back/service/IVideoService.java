@@ -50,4 +50,6 @@ public interface IVideoService extends IService<Video> {
 
 
     Result UpdateVideoName(String currentName, String updateName);
+
+    Result getSystemrecommend();
 }
